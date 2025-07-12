@@ -32,5 +32,10 @@
                 <span>Daftar Mitra</span>
             </a>
         </li>
+  <a class="nav-link collapsed" href="/daftar-laporan">
+    <i class="bi bi-folder2"></i>
+    <span>Daftar Laporan</span>
+  </a>
+</li>
     </ul>
 </aside>

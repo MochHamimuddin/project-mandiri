@@ -28,26 +28,13 @@ Route::middleware(['auth', 'inactivity'])->group(function () {
     });
 
 
+    Route::get('/daftar-laporan', function () {
+        return view('daftarlaporan.daftarpengguna');
+    })->name('daftar-laporan');
 });
 
 Route::get('/', function () {
     return redirect()->route('login');
-});
-
-Route::get('/test-fonnte-api', function() {
-    try {
-        $response = Http::withHeaders([
-            'Authorization' => env('FONNTE_API_KEY')
-        ])->post('https://api.fonnte.com/send', [
-            'target' => '628998947545', // Ganti dengan nomor test Anda
-            'message' => 'Test API Fonnte',
-            'countryCode' => '62'
-        ]);
-
-        return $response->json();
-    } catch (\Exception $e) {
-        return ['error' => $e->getMessage()];
-    }
 });
 
 
