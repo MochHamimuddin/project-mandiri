@@ -15,6 +15,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('check:deadline')
             ->dailyAt('19:21')
             ->timezone('Asia/Jakarta');
+        $schedule->command('fatigue:check-deadlines')
+            ->everyMinute()
+            ->runInBackground() // Untuk efisiensi
+            ->appendOutputTo(storage_path('logs/notifications.log'));
     }
 
     /**
