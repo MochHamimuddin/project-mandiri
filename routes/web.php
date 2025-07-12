@@ -16,6 +16,9 @@ Route::middleware(['auth', 'inactivity'])->group(function () {
     })->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/daftar-laporan', function () {
+        return view('daftarlaporan.daftarpengguna');
+    })->name('daftar-laporan');
 });
 
 Route::get('/', function () {
