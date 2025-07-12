@@ -26,5 +26,11 @@
                 <span>Daftar Pengguna</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('mitra.index') }}">
+                <i class="bi bi-folder2"></i>
+                <span>Daftar Mitra</span>
+            </a>
+        </li>
     </ul>
 </aside>

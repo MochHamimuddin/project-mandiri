@@ -30,5 +30,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'fonnte' => [
+        'key' => env('FONNTE_API_KEY'),
+        'url' => env('FONNTE_BASE_URL'),
+        'device_id' => env('FONNTE_DEVICE_ID'),
+    ],
 
 ];

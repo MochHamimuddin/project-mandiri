@@ -93,6 +93,12 @@ return [
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
+        'scheduler' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/scheduler.log'),
+            'level' => 'debug',
+            'days' => 7,
+        ],
 
         'stderr' => [
             'driver' => 'monolog',
