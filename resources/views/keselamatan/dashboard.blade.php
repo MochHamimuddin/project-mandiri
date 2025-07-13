@@ -2,6 +2,16 @@
 
 @section('content')
 <div class="container-fluid">
+    <!-- KPP Mining Header Image -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <img src="https://www.kppmining.com/assets/images/kpp-as-the-big-company.jpg" 
+                 alt="KPP Mining Company" 
+                 class="img-fluid rounded shadow"
+                 style="max-height: 300px; width: 100%; object-fit: cover;">
+        </div>
+    </div>
+
     <div class="row mb-3">
         <div class="col-md-12">
             <h2 class="text-center">Keselamatan Area Kerja</h2>
