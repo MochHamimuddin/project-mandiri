@@ -50,21 +50,26 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="d-flex gap-2">
-                                    <a href="{{ route('keselamatan.show', $activity->id) }}" class="btn btn-sm btn-info" title="Detail">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('keselamatan.edit', $activity->id) }}" class="btn btn-sm btn-primary" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <form action="{{ route('keselamatan.destroy', $activity->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus?')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                               <div class="d-flex gap-2">
+    {{-- Tombol Detail - Tampilkan untuk semua role --}}
+    <a href="{{ route('keselamatan.show', $activity->id) }}" class="btn btn-sm btn-info" title="Detail">
+        <i class="bi bi-eye"></i>
+    </a>
+
+    {{-- Tombol Edit dan Hapus - Hanya untuk role selain 002 --}}
+    @if(auth()->user()->code_role !== '002')
+        <a href="{{ route('keselamatan.edit', $activity->id) }}" class="btn btn-sm btn-primary" title="Edit">
+            <i class="bi bi-pencil"></i>
+        </a>
+        <form action="{{ route('keselamatan.destroy', $activity->id) }}" method="POST" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus?')">
+                <i class="bi bi-trash"></i>
+            </button>
+        </form>
+    @endif
+</div>
                             </td>
                         </tr>
                         @empty

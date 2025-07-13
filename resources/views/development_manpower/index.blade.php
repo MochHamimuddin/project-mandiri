@@ -9,21 +9,6 @@
         </a>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <form action="{{ route('development-manpower.index') }}" method="GET" class="form-inline">
-                <select name="kategori" class="form-control mr-2">
-                    <option value="">Semua Kategori</option>
-                    @foreach(App\Models\DevelopmentManpower::KATEGORI_AKTIVITAS as $kategori)
-                        <option value="{{ $kategori }}" {{ request('kategori') == $kategori ? 'selected' : '' }}>{{ $kategori }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
-            </form>
-        </div>
-    </div>
 
     <div class="card">
         <div class="card-body">
@@ -48,19 +33,26 @@
                             <td>{{ $activity->tanggal_aktivitas->format('d/m/Y') }}</td>
                             <td>{{ $activity->pengawas->nama_lengkap ?? '-' }}</td>
                             <td>
-                                <a href="{{ route('development-manpower.show', $activity->id) }}" class="btn btn-sm btn-info" title="Detail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('development-manpower.edit', $activity->id) }}" class="btn btn-sm btn-warning" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('development-manpower.destroy', $activity->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="d-flex gap-2">
+    {{-- Detail button - visible to all roles --}}
+    <a href="{{ route('development-manpower.show', $activity->id) }}" class="btn btn-sm btn-info" title="Detail">
+        <i class="fas fa-eye"></i>
+    </a>
+
+    {{-- Edit and Delete buttons - only visible to non-002 roles --}}
+    @if(auth()->user()->code_role !== '002')
+        <a href="{{ route('development-manpower.edit', $activity->id) }}" class="btn btn-sm btn-warning" title="Edit">
+            <i class="fas fa-edit"></i>
+        </a>
+        <form action="{{ route('development-manpower.destroy', $activity->id) }}" method="POST" style="display:inline-block;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                <i class="fas fa-trash"></i>
+            </button>
+        </form>
+    @endif
+</div>
                             </td>
                         </tr>
                         @endforeach

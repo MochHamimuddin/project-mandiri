@@ -21,34 +21,6 @@
         </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="GET" action="{{ route('program-kesehatan.index') }}">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="type">Jenis Program</label>
-                            <select name="type" id="type" class="form-control">
-                                <option value="">Semua Jenis</option>
-                                <option value="MCU_TAHUNAN" {{ request('type') == 'MCU_TAHUNAN' ? 'selected' : '' }}>MCU Tahunan</option>
-                                <option value="PENYAKIT_KRONIS" {{ request('type') == 'PENYAKIT_KRONIS' ? 'selected' : '' }}>Penyakit Kronis</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-filter"></i> Filter
-                        </button>
-                        <a href="{{ route('program-kesehatan.index') }}" class="btn btn-secondary ml-2">
-                            <i class="fas fa-sync-alt"></i> Reset
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Data Table -->
     <div class="card shadow">
         <div class="card-header py-3">
@@ -81,20 +53,26 @@
                             <td>{{ $program->pengawas->nama_lengkap }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('program-kesehatan.show', $program->id) }}" class="btn btn-info btn-sm" title="Detail">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('program-kesehatan.edit', $program->id) }}" class="btn btn-warning btn-sm" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form action="{{ route('program-kesehatan.destroy', $program->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+    {{-- Detail button - visible to all roles --}}
+                        <a href="{{ route('program-kesehatan.show', $program->id) }}" class="btn btn-info btn-sm" title="Detail">
+                            <i class="fas fa-eye"></i>
+                        </a>
+
+                        {{-- Edit and Delete buttons - only visible to admin (role '001') --}}
+                        @if(auth()->user()->code_role === '001')
+                            <a href="{{ route('program-kesehatan.edit', $program->id) }}" class="btn btn-warning btn-sm" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ route('program-kesehatan.destroy', $program->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        @endif
+                    </div>
                             </td>
                         </tr>
                         @endforeach

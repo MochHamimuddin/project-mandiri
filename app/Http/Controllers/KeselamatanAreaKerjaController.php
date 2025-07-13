@@ -13,13 +13,18 @@ class KeselamatanAreaKerjaController extends Controller
 {
     public function dashboard()
     {
+        // Cek role user
+        $user = auth()->user();
+
         $activities = [
             [
                 'type' => 'inspeksi',
                 'name' => 'Inspeksi & Observasi Tematik',
                 'icon' => 'bi-clipboard2-check',
                 'color' => 'primary',
-                'count' => KeselamatanAreaKerja::inspeksiObservasi()->count(),
+                'count' => $user->code_role === '001' ?
+                    KeselamatanAreaKerja::inspeksiObservasi()->count() :
+                    KeselamatanAreaKerja::inspeksiObservasi()->where('created_by', $user->id)->count(),
                 'route' => 'keselamatan.type.index',
                 'report_route' => 'keselamatan.type.report',
                 'create_route' => 'keselamatan.type.create'
@@ -29,7 +34,9 @@ class KeselamatanAreaKerjaController extends Controller
                 'name' => 'Gelar/Inspeksi Tools',
                 'icon' => 'bi-tools',
                 'color' => 'success',
-                'count' => KeselamatanAreaKerja::gelarInspeksi()->count(),
+                'count' => $user->code_role === '001' ?
+                    KeselamatanAreaKerja::gelarInspeksi()->count() :
+                    KeselamatanAreaKerja::gelarInspeksi()->where('created_by', $user->id)->count(),
                 'route' => 'keselamatan.type.index',
                 'report_route' => 'keselamatan.type.report',
                 'create_route' => 'keselamatan.type.create'
@@ -39,7 +46,9 @@ class KeselamatanAreaKerjaController extends Controller
                 'name' => 'Housekeeping Workshop',
                 'icon' => 'bi-house-gear',
                 'color' => 'warning',
-                'count' => KeselamatanAreaKerja::housekeeping()->count(),
+                'count' => $user->code_role === '001' ?
+                    KeselamatanAreaKerja::housekeeping()->count() :
+                    KeselamatanAreaKerja::housekeeping()->where('created_by', $user->id)->count(),
                 'route' => 'keselamatan.type.index',
                 'report_route' => 'keselamatan.type.report',
                 'create_route' => 'keselamatan.type.create'
@@ -52,11 +61,17 @@ class KeselamatanAreaKerjaController extends Controller
     public function index($type)
     {
         $title = KeselamatanAreaKerja::getActivityTypes()[$type] ?? 'Aktivitas';
+        $user = auth()->user();
 
-        $activities = KeselamatanAreaKerja::with(['pengawas', 'mitra'])
-            ->where('activity_type', $type)
-            ->latest()
-            ->paginate(10);
+        // Query berdasarkan role
+        $query = KeselamatanAreaKerja::with(['pengawas', 'mitra'])
+            ->where('activity_type', $type);
+
+        if ($user->code_role !== '001') {
+            $query->where('created_by', $user->id);
+        }
+
+        $activities = $query->latest()->paginate(10);
 
         return view('keselamatan.index', compact('activities', 'title', 'type'));
     }
@@ -97,16 +112,13 @@ class KeselamatanAreaKerjaController extends Controller
             $data['created_by'] = auth()->id();
             $data['updated_by'] = auth()->id();
 
-
             if ($request->hasFile('path_foto')) {
                 $data['path_foto'] = $request->file('path_foto')->store('public/keselamatan/foto');
-                // Simpan path relatif tanpa 'public/'
                 $data['path_foto'] = str_replace('public/', '', $data['path_foto']);
             }
 
             if ($request->hasFile('path_file')) {
                 $data['path_file'] = $request->file('path_file')->store('public/keselamatan/dokumen');
-                // Simpan path relatif tanpa 'public/'
                 $data['path_file'] = str_replace('public/', '', $data['path_file']);
             }
 
@@ -123,16 +135,25 @@ class KeselamatanAreaKerjaController extends Controller
     }
 
     public function show($id)
-{
-    $activity = KeselamatanAreaKerja::with(['pengawas', 'mitra', 'creator', 'updater'])->findOrFail($id);
-    $activityTypes = KeselamatanAreaKerja::getActivityTypes();
+    {
+        $activity = KeselamatanAreaKerja::with(['pengawas', 'mitra', 'creator', 'updater'])->findOrFail($id);
+        $user = auth()->user();
 
-    return view('keselamatan.show', compact('activity', 'activityTypes'));
-}
+        $activityTypes = KeselamatanAreaKerja::getActivityTypes();
+
+        return view('keselamatan.show', compact('activity', 'activityTypes'));
+    }
 
     public function edit($id)
     {
         $activity = KeselamatanAreaKerja::findOrFail($id);
+        $user = auth()->user();
+
+        // Cek otorisasi
+        if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $pengawas = User::select('id', 'nama_lengkap')->get();
         $mitras = Mitra::select('id', 'nama_perusahaan')->get();
 
@@ -142,6 +163,12 @@ class KeselamatanAreaKerjaController extends Controller
     public function update(Request $request, $id)
     {
         $activity = KeselamatanAreaKerja::findOrFail($id);
+        $user = auth()->user();
+
+        // Cek otorisasi
+        if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $validator = Validator::make($request->all(), [
             'pengawas_id' => 'required|exists:data_users,id',
@@ -191,6 +218,12 @@ class KeselamatanAreaKerjaController extends Controller
     public function destroy($id)
     {
         $activity = KeselamatanAreaKerja::findOrFail($id);
+        $user = auth()->user();
+
+        // Cek otorisasi
+        if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
 
         try {
             if ($activity->path_foto) {
@@ -214,6 +247,8 @@ class KeselamatanAreaKerjaController extends Controller
 
     public function report($type)
     {
+        $user = auth()->user();
+
         $typeMapping = [
             'inspeksi' => KeselamatanAreaKerja::TYPE_INSPEKSI_OBSERVASI,
             'gelar' => KeselamatanAreaKerja::TYPE_GELAR_INSPEKSI,
@@ -223,10 +258,15 @@ class KeselamatanAreaKerjaController extends Controller
         $activityType = $typeMapping[$type] ?? $type;
         $title = 'Laporan ' . (KeselamatanAreaKerja::getActivityTypes()[$activityType] ?? 'Aktivitas');
 
-        $activities = KeselamatanAreaKerja::with(['pengawas', 'mitra'])
-            ->where('activity_type', $activityType)
-            ->latest()
-            ->get();
+        // Query berdasarkan role
+        $query = KeselamatanAreaKerja::with(['pengawas', 'mitra'])
+            ->where('activity_type', $activityType);
+
+        if ($user->code_role !== '001') {
+            $query->where('created_by', $user->id);
+        }
+
+        $activities = $query->latest()->get();
 
         return view('keselamatan.report', compact('activities', 'title', 'type'));
     }
@@ -234,11 +274,20 @@ class KeselamatanAreaKerjaController extends Controller
     public function toggleApproval($id)
     {
         $activity = KeselamatanAreaKerja::findOrFail($id);
+        $user = auth()->user();
+
+        // Hanya admin yang bisa mengubah status approval
+        if ($user->code_role !== '001') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki izin untuk melakukan tindakan ini'
+            ], 403);
+        }
 
         try {
             $activity->update([
                 'is_approved' => !$activity->is_approved,
-                'updated_by' => auth()->id()
+                'updated_by' => $user->id
             ]);
 
             return response()->json([

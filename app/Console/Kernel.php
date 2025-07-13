@@ -19,7 +19,11 @@ class Kernel extends ConsoleKernel
             ->everyMinute()
             ->runInBackground() // Untuk efisiensi
             ->appendOutputTo(storage_path('logs/notifications.log'));
-    }
+
+        $schedule->command('send:inspeksi-notifications')
+            ->everyMinute()
+            ->runInBackground();
+        }
 
     /**
      * Register the commands for the application.

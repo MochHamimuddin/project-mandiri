@@ -62,7 +62,7 @@ class AuthController extends Controller
             $request->session()->flash('alert_timer', 2000);
             $request->session()->flash('alert_showConfirmButton', false);
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/daftar-laporan');
         }
 
         return back()->withErrors([

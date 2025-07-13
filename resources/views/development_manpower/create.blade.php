@@ -22,14 +22,28 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="pengawas_id">Pengawas</label>
-                    <select class="form-control" id="pengawas_id" name="pengawas_id">
-                        <option value="">-- Pilih Pengawas --</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->nama_lengkap }}</option>
-                        @endforeach
-                    </select>
-                </div>
+    <label for="pengawas_id">Pengawas</label>
+    <select class="form-control" id="pengawas_id" name="pengawas_id"
+        @if(auth()->user()->code_role === '002') disabled @endif>
+        <option value="">-- Pilih Pengawas --</option>
+
+        @if(auth()->user()->code_role === '001')
+            {{-- Admin can see all supervisors --}}
+            @foreach($users as $user)
+                <option value="{{ $user->id }}" {{ old('pengawas_id', $selectedPengawasId ?? '') == $user->id ? 'selected' : '' }}>
+                    {{ $user->nama_lengkap }}
+                </option>
+            @endforeach
+        @elseif(auth()->user()->code_role === '002')
+            {{-- Regular user can only see themselves --}}
+            <option value="{{ auth()->user()->id }}" selected>
+                {{ auth()->user()->nama_lengkap }}
+            </option>
+            {{-- Hidden input to ensure value gets submitted --}}
+            <input type="hidden" name="pengawas_id" value="{{ auth()->user()->id }}">
+        @endif
+    </select>
+</div>
 
                 @if(in_array($kategori, ['SKKP/POP For GL Mitra', 'Training HRCP Mitra', 'Training Additional Plant']))
                 <div class="form-group">

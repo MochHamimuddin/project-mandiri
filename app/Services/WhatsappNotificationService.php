@@ -25,6 +25,33 @@ Segera upload dokumen sebelum waktu habis!
 MSG;
     }
 
+     public function sendInspeksiReminder(string $phone, string $inspeksiType, string $deadline, string $recipientName): bool
+    {
+        $message = $this->formatInspeksiMessage($inspeksiType, $deadline, $recipientName);
+        return $this->sendMessage($phone, $message);
+    }
+
+    private function formatInspeksiMessage(string $inspeksiType, string $deadline, string $recipientName): string
+    {
+        $recipientText = $recipientName === 'Admin'
+            ? "Admin"
+            : "Bapak/Ibu {$recipientName}";
+
+        return <<<MSG
+🚗 *PENGINGAT DEADLINE INSPEKSI KENDARAAN* 🚗
+
+Kepada: *{$recipientText}*
+Jenis Inspeksi: *{$inspeksiType}*
+Deadline: *{$deadline}*
+
+Status: *BELUM DIUPLOAD*
+
+Segera upload laporan inspeksi sebelum waktu habis!
+
+_Pesan ini dikirim otomatis oleh sistem_
+MSG;
+    }
+
     private function sendMessage(string $phone, string $message): bool
     {
         $formattedPhone = $this->formatPhone($phone);

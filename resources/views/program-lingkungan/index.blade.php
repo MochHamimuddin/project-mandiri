@@ -53,13 +53,20 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('program-lingkungan.show', $activity->id) }}" class="btn btn-sm btn-info">Detail</a>
-                                <a href="{{ route('program-lingkungan.edit', $activity->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('program-lingkungan.destroy', $activity->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                                </form>
+                                <div class="d-flex gap-2">
+    {{-- Detail button - visible to all roles --}}
+    <a href="{{ route('program-lingkungan.show', $activity->id) }}" class="btn btn-sm btn-info">Detail</a>
+
+    {{-- Edit and Delete buttons - only for admin (role '001') --}}
+    @if(auth()->user()->code_role === '001')
+        <a href="{{ route('program-lingkungan.edit', $activity->id) }}" class="btn btn-sm btn-warning">Edit</a>
+        <form action="{{ route('program-lingkungan.destroy', $activity->id) }}" method="POST" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+        </form>
+    @endif
+</div>
                             </td>
                         </tr>
                         @endforeach

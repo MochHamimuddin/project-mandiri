@@ -63,7 +63,6 @@
             </div>
 
             <div class="text-center mt-3">
-              <a href="{{ route('fatigue-activities.edit', $activity->id) }}" class="btn btn-warning">Edit</a>
               <a href="{{ route('fatigue-activities.index') }}" class="btn btn-secondary">Back</a>
             </div>
           </div>

@@ -89,14 +89,6 @@
 
             <div class="mt-3 d-flex justify-content-end gap-2">
                 <a href="{{ route('keselamatan.edit', ['activity' => $activity->id]) }}" class="btn btn-warning">
-                <form action="{{ route('keselamatan.destroy', ['activity' => $activity->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger"
-                            onclick="return confirm('Apakah Anda yakin ingin menghapus?')">
-                        <i class="bi bi-trash"></i> Hapus
-                    </button>
-                </form>
                 <button class="btn btn-{{ $activity->is_approved ? 'warning' : 'success' }}"
                         onclick="toggleApproval({{ $activity->id }})">
                     <i class="bi bi-{{ $activity->is_approved ? 'x-circle' : 'check-circle' }}"></i>

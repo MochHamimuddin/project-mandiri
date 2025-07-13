@@ -10,9 +10,6 @@
             <a href="{{ route('program-kesehatan.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
-            <a href="{{ route('program-kesehatan.edit', $program->id) }}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Edit
-            </a>
         </div>
     </div>
 

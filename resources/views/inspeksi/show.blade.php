@@ -5,9 +5,6 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h4>Detail Inspeksi Kendaraan</h4>
         <div>
-            <a href="{{ route('inspeksi.edit', $inspeksi->id) }}" class="btn btn-warning btn-sm">
-                <i class="bi bi-pencil"></i> Edit
-            </a>
             <a href="{{ route('inspeksi.index') }}" class="btn btn-secondary btn-sm">
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>

@@ -11,19 +11,33 @@
                 @csrf
                 <input type="hidden" name="activity_type" value="{{ $type }}">
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="supervisor_id">Pengawas</label>
-                            <select name="supervisor_id" id="supervisor_id" class="form-control" required>
-                                <option value="">Pilih Pengawas</option>
-                                @foreach($supervisors as $supervisor)
-                                <option value="{{ $supervisor->id }}">{{ $supervisor->nama_lengkap }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+               <div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="supervisor_id">Pengawas</label>
+            <select name="supervisor_id" id="supervisor_id" class="form-control" required
+                @if(auth()->user()->code_role === '002') disabled @endif>
+                <option value="">Pilih Pengawas</option>
+
+                @if(auth()->user()->code_role === '001')
+                    {{-- Admin can see all supervisors --}}
+                    @foreach($supervisors as $supervisor)
+                        <option value="{{ $supervisor->id }}" {{ old('supervisor_id', $selectedSupervisorId ?? '') == $supervisor->id ? 'selected' : '' }}>
+                            {{ $supervisor->nama_lengkap }}
+                        </option>
+                    @endforeach
+                @elseif(auth()->user()->code_role === '002')
+                    {{-- Regular user can only see themselves --}}
+                    <option value="{{ auth()->user()->id }}" selected>
+                        {{ auth()->user()->nama_lengkap }}
+                    </option>
+                    {{-- Hidden input to ensure value is submitted --}}
+                    <input type="hidden" name="supervisor_id" value="{{ auth()->user()->id }}">
+                @endif
+            </select>
+        </div>
+    </div>
+</div>
 
                 <div class="form-group">
                     <label for="foto">Foto</label>

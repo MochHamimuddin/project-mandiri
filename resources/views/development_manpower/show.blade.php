@@ -5,9 +5,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Detail {{ $development_manpower->kategori_aktivitas }}</h2>
         <div>
-            <a href="{{ route('development-manpower.edit', $development_manpower->id) }}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Edit
-            </a>
             <a href="{{ route('development-manpower.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>

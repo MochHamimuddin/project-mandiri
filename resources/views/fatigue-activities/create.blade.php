@@ -24,14 +24,22 @@
 
               <div class="row mb-3">
                 <div class="col-md-6">
-                  <label for="user_id" class="form-label">Employee</label>
-                  <select class="form-select" id="user_id" name="user_id" required>
-                    <option value="">Select Employee</option>
-                    @foreach($users as $user)
-                      <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->nama_lengkap }}</option>
-                    @endforeach
-                  </select>
-                </div>
+    <label for="user_id" class="form-label">Employee</label>
+    <select class="form-select" id="user_id" name="user_id" required>
+        <option value="">Select Employee</option>
+        @if(auth()->user()->code_role === '001') {{-- Admin --}}
+            @foreach($users as $user)
+                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                    {{ $user->nama_lengkap }}
+                </option>
+            @endforeach
+        @else {{-- Non-admin hanya bisa melihat dirinya sendiri --}}
+            <option value="{{ auth()->user()->id }}" selected>
+                {{ auth()->user()->nama_lengkap }}
+            </option>
+        @endif
+    </select>
+</div>
 
                 <div class="col-md-6">
                   <label for="supervisor_id" class="form-label">Supervisor</label>

@@ -57,19 +57,26 @@
                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
                             <td>{{ $item->creator->nama_lengkap }}</td>
                             <td>
-                                <a href="{{ route('fire-preventive.show', $item->id) }}" class="btn btn-sm btn-info" title="Detail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('fire-preventive.edit', $item->id) }}" class="btn btn-sm btn-warning" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('fire-preventive.destroy', $item->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Apakah Anda yakin?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="d-flex gap-2">
+    {{-- Tombol Detail - Tampilkan untuk semua role --}}
+    <a href="{{ route('fire-preventive.show', $item->id) }}" class="btn btn-sm btn-info" title="Detail">
+        <i class="fas fa-eye"></i>
+    </a>
+
+    {{-- Tombol Edit dan Hapus - Hanya untuk role selain 002 --}}
+    @if(auth()->user()->code_role !== '002')
+        <a href="{{ route('fire-preventive.edit', $item->id) }}" class="btn btn-sm btn-warning" title="Edit">
+            <i class="fas fa-edit"></i>
+        </a>
+        <form action="{{ route('fire-preventive.destroy', $item->id) }}" method="POST" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Apakah Anda yakin?')">
+                <i class="fas fa-trash"></i>
+            </button>
+        </form>
+    @endif
+</div>
                             </td>
                         </tr>
                         @endforeach

@@ -25,21 +25,36 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="pengawas_id">Pengawas</label>
-                    <select class="form-control @error('pengawas_id') is-invalid @enderror" id="pengawas_id" name="pengawas_id" required>
-                        <option value="">Pilih Pengawas</option>
-                        @foreach($pengawasList as $pengawas)
-                        <option value="{{ $pengawas->id }}" {{ old('pengawas_id') == $pengawas->id ? 'selected' : '' }}>
-                            {{ $pengawas->nama_lengkap }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('pengawas_id')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
+    <label for="pengawas_id">Pengawas</label>
+    <select class="form-control @error('pengawas_id') is-invalid @enderror" id="pengawas_id" name="pengawas_id"
+        required
+        @if(auth()->user()->code_role === '002') disabled @endif>
+
+        <option value="">Pilih Pengawas</option>
+
+        @if(auth()->user()->code_role === '001')
+            {{-- Admin can see all supervisors --}}
+            @foreach($pengawasList as $pengawas)
+                <option value="{{ $pengawas->id }}" {{ old('pengawas_id', $selectedPengawasId ?? '') == $pengawas->id ? 'selected' : '' }}>
+                    {{ $pengawas->nama_lengkap }}
+                </option>
+            @endforeach
+        @elseif(auth()->user()->code_role === '002')
+            {{-- Regular user can only see themselves --}}
+            <option value="{{ auth()->user()->id }}" selected>
+                {{ auth()->user()->nama_lengkap }}
+            </option>
+            {{-- Hidden input to ensure value gets submitted --}}
+            <input type="hidden" name="pengawas_id" value="{{ auth()->user()->id }}">
+        @endif
+    </select>
+
+    @error('pengawas_id')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
 
                 <div class="form-group">
                     <label for="foto">Upload Foto</label>

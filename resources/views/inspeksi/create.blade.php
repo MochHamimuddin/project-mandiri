@@ -61,19 +61,32 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="pengawas_id" class="form-label">Pengawas</label>
-                    <select class="form-select @error('pengawas_id') is-invalid @enderror" id="pengawas_id" name="pengawas_id">
-                        <option value="">Pilih Pengawas</option>
-                        @foreach($users as $p)
-                        <option value="{{ $p->id }}" {{ old('pengawas_id') == $p->id ? 'selected' : '' }}>
-                            {{ $p->nama_lengkap }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('pengawas_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+    <label for="pengawas_id" class="form-label">Pengawas</label>
+    <select class="form-select @error('pengawas_id') is-invalid @enderror" id="pengawas_id" name="pengawas_id"
+        @if(auth()->user()->code_role === '002') disabled @endif>
+        <option value="">Pilih Pengawas</option>
+
+        @if(auth()->user()->code_role === '001')
+            {{-- Admin melihat semua pengawas --}}
+            @foreach($users as $p)
+                <option value="{{ $p->id }}" {{ old('pengawas_id', isset($current_user_id) ? $current_user_id : '') == $p->id ? 'selected' : '' }}>
+                    {{ $p->nama_lengkap }}
+                </option>
+            @endforeach
+        @elseif(auth()->user()->code_role === '002')
+            {{-- User biasa hanya melihat dirinya sendiri --}}
+            <option value="{{ auth()->user()->id }}" selected>
+                {{ auth()->user()->nama_lengkap }}
+            </option>
+            {{-- Tambahkan input hidden untuk memastikan nilai terkirim --}}
+            <input type="hidden" name="pengawas_id" value="{{ auth()->user()->id }}">
+        @endif
+    </select>
+
+    @error('pengawas_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
                 <div class="col-md-6">
                     <label for="mitra_id" class="form-label">Mitra</label>
                     <select class="form-select @error('mitra_id') is-invalid @enderror" id="mitra_id" name="mitra_id">

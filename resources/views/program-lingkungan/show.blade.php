@@ -101,22 +101,25 @@
                     Terakhir diupdate: {{ $programLingkunganHidup->updated_at->diffForHumans() }}
                 </small>
                 <div>
-                    <a href="{{ route('program-lingkungan.edit', $programLingkunganHidup->id) }}"
-                       class="btn btn-warning btn-sm me-2">
-                       <i class="fas fa-edit"></i> Edit
-                    </a>
-                    <form action="{{ route('program-lingkungan.destroy', $programLingkunganHidup->id) }}"
-                          method="POST"
-                          class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </form>
-                </div>
+    @if(auth()->user()->code_role === '001')
+        {{-- Only show Edit and Delete buttons for admin (role '001') --}}
+        <a href="{{ route('program-lingkungan.edit', $programLingkunganHidup->id) }}"
+           class="btn btn-warning btn-sm me-2">
+           <i class="fas fa-edit"></i> Edit
+        </a>
+        <form action="{{ route('program-lingkungan.destroy', $programLingkunganHidup->id) }}"
+              method="POST"
+              class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                    <i class="fas fa-trash"></i> Hapus
+            </button>
+        </form>
+    @endif
+</div>
             </div>
         </div>
     </div>

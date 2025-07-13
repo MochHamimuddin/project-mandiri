@@ -14,8 +14,19 @@ class FirePreventiveController extends Controller
     // 1. Dashboard Card
     public function dashboard()
     {
-        $pencucianCount = FirePreventiveManagement::where('activity_type', 'Pencucian Unit')->count();
-        $inspeksiCount = FirePreventiveManagement::where('activity_type', 'Inspeksi APAR')->count();
+        $user = auth()->user();
+
+        $pencucianCount = $user->code_role === '001' ?
+            FirePreventiveManagement::where('activity_type', 'Pencucian Unit')->count() :
+            FirePreventiveManagement::where('activity_type', 'Pencucian Unit')
+                ->where('created_by', $user->id)
+                ->count();
+
+        $inspeksiCount = $user->code_role === '001' ?
+            FirePreventiveManagement::where('activity_type', 'Inspeksi APAR')->count() :
+            FirePreventiveManagement::where('activity_type', 'Inspeksi APAR')
+                ->where('created_by', $user->id)
+                ->count();
 
         return view('fire-preventive.dashboard', [
             'pencucianCount' => $pencucianCount,
@@ -26,9 +37,16 @@ class FirePreventiveController extends Controller
     // 2. Index dengan Tabel
     public function index()
     {
-        $data = FirePreventiveManagement::with(['supervisor', 'creator'])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+        $user = auth()->user();
+
+        $query = FirePreventiveManagement::with(['supervisor', 'creator'])
+                    ->orderBy('created_at', 'desc');
+
+        if ($user->code_role !== '001') {
+            $query->where('created_by', $user->id);
+        }
+
+        $data = $query->get();
 
         return view('fire-preventive.index', [
             'activities' => $data
@@ -119,105 +137,125 @@ class FirePreventiveController extends Controller
     public function show($id)
     {
         $activity = FirePreventiveManagement::with(['supervisor', 'creator'])->findOrFail($id);
+        $user = auth()->user();
+
 
         return view('fire-preventive.show', compact('activity'));
     }
 
     // Edit Form
     public function edit($id)
-{
-    $activity = FirePreventiveManagement::with(['supervisor', 'creator'])->findOrFail($id);
+    {
+        $activity = FirePreventiveManagement::with(['supervisor', 'creator'])->findOrFail($id);
+        $user = auth()->user();
 
-    // Versi 1: Jika menggunakan code_role
-    $supervisors = User::whereHas('role', function($q) {
-        $q->whereIn('code_role', ['001', '002']); // Sesuaikan dengan kode role pengawas
-    })->orderBy('nama_lengkap')->get();
+        // Cek otorisasi
+        if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
+            abort(403, 'Anda tidak memiliki izin untuk mengedit data ini');
+        }
 
-    if ($supervisors->isEmpty()) {
-        $supervisors = User::whereIn('code_role', ['001', '002'])->get();
+        $supervisors = User::whereHas('role', function($q) {
+            $q->whereIn('code_role', ['001', '002']);
+        })->orderBy('nama_lengkap')->get();
+
+        if ($supervisors->isEmpty()) {
+            $supervisors = User::whereIn('code_role', ['001', '002'])->get();
+        }
+
+        return view('fire-preventive.edit', [
+            'activity' => $activity,
+            'supervisors' => $supervisors
+        ]);
     }
-
-    return view('fire-preventive.edit', [
-        'activity' => $activity,
-        'supervisors' => $supervisors
-    ]);
-}
 
     // Update Data
     public function update(Request $request, $id)
-{
-    DB::beginTransaction();
-    try {
-        $activity = FirePreventiveManagement::findOrFail($id);
+    {
+        DB::beginTransaction();
+        try {
+            $activity = FirePreventiveManagement::findOrFail($id);
+            $user = auth()->user();
 
-        $request->validate($this->validationRules($activity->activity_type));
-
-        // Ambil semua data kecuali token dan file
-        $data = $request->except(['_token', '_method', 'foto', 'form_fpp']);
-        $data['updated_by'] = auth()->id();
-
-        // Handle foto update
-        if ($request->hasFile('foto')) {
-            // Delete old foto if exists
-            if ($activity->foto_path) {
-                Storage::disk('public')->delete($activity->foto_path);
+            // Cek otorisasi
+            if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
+                abort(403, 'Anda tidak memiliki izin untuk memperbarui data ini');
             }
-            $data['foto_path'] = $request->file('foto')->store('fire-preventive/fotos', 'public');
-        } else {
-            // Pertahankan value lama jika tidak ada input baru
-            $data['foto_path'] = $activity->foto_path;
-        }
 
-        // Handle form FPP khusus untuk Pencucian Unit
-        if ($activity->activity_type === 'Pencucian Unit') {
-            if ($request->hasFile('form_fpp')) {
-                // Delete old form if exists
-                if ($activity->form_fpp_path) {
-                    Storage::disk('public')->delete($activity->form_fpp_path);
+            $request->validate($this->validationRules($activity->activity_type));
+
+            // Ambil semua data kecuali token dan file
+            $data = $request->except(['_token', '_method', 'foto', 'form_fpp']);
+            $data['updated_by'] = $user->id;
+
+            // Handle foto update
+            if ($request->hasFile('foto')) {
+                // Delete old foto if exists
+                if ($activity->foto_path) {
+                    Storage::disk('public')->delete($activity->foto_path);
                 }
-                $data['form_fpp_path'] = $request->file('form_fpp')->store('fire-preventive/forms', 'public');
+                $data['foto_path'] = $request->file('foto')->store('fire-preventive/fotos', 'public');
             } else {
                 // Pertahankan value lama jika tidak ada input baru
-                $data['form_fpp_path'] = $activity->form_fpp_path;
+                $data['foto_path'] = $activity->foto_path;
             }
+
+            // Handle form FPP khusus untuk Pencucian Unit
+            if ($activity->activity_type === 'Pencucian Unit') {
+                if ($request->hasFile('form_fpp')) {
+                    // Delete old form if exists
+                    if ($activity->form_fpp_path) {
+                        Storage::disk('public')->delete($activity->form_fpp_path);
+                    }
+                    $data['form_fpp_path'] = $request->file('form_fpp')->store('fire-preventive/forms', 'public');
+                } else {
+                    // Pertahankan value lama jika tidak ada input baru
+                    $data['form_fpp_path'] = $activity->form_fpp_path;
+                }
+            }
+
+            $activity->update($data);
+            DB::commit();
+
+            return redirect()->route('fire-preventive.index')
+                           ->with('success', 'Data berhasil diperbarui');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                           ->withInput()
+                           ->with('error', 'Gagal memperbarui data: '.$e->getMessage());
+        }
+    }
+
+    private function validationRules($type)
+    {
+        $rules = [
+            'supervisor_id' => 'required|exists:data_users,id',
+            'description' => 'required|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ];
+
+        if ($type === 'Pencucian Unit') {
+            $rules['form_fpp'] = 'nullable|file|mimes:pdf,doc,docx|max:5120';
+        } else {
+            $rules['inspection_location'] = 'required|string|max:100';
         }
 
-        $activity->update($data);
-        DB::commit();
-
-        return redirect()->route('fire-preventive.index')
-                       ->with('success', 'Data berhasil diperbarui');
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return redirect()->back()
-                       ->withInput()
-                       ->with('error', 'Gagal memperbarui data: '.$e->getMessage());
+        return $rules;
     }
-}
-
-private function validationRules($type)
-{
-    $rules = [
-        'supervisor_id' => 'required|exists:data_users,id',
-        'description' => 'required|string',
-        'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-    ];
-
-    if ($type === 'Pencucian Unit') {
-        $rules['form_fpp'] = 'nullable|file|mimes:pdf,doc,docx|max:5120';
-    } else {
-        $rules['inspection_location'] = 'required|string|max:100';
-    }
-
-    return $rules;
-}
 
     // Delete Data
     public function destroy($id)
     {
         $activity = FirePreventiveManagement::findOrFail($id);
-        $activity->deleted_by = Auth::id();
+        $user = auth()->user();
+
+        // Cek otorisasi
+        if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
+            abort(403, 'Anda tidak memiliki izin untuk menghapus data ini');
+        }
+
+        $activity->deleted_by = $user->id;
         $activity->save();
 
         $activity->delete();

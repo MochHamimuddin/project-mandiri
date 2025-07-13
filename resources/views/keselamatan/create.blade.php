@@ -16,19 +16,34 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="pengawas_id" class="form-label">Pengawas</label>
-                            <select class="form-select @error('pengawas_id') is-invalid @enderror" id="pengawas_id" name="pengawas_id" required>
-                                <option value="">Pilih Pengawas</option>
-                                @foreach($pengawas as $p)
-                                <option value="{{ $p->id }}" {{ old('pengawas_id') == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama_lengkap }} ({{ $p->username }})
-                                </option>
-                                @endforeach
-                            </select>
-                            @error('pengawas_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+    <label for="pengawas_id" class="form-label">Pengawas</label>
+    <select class="form-select @error('pengawas_id') is-invalid @enderror" id="pengawas_id" name="pengawas_id"
+        required
+        @if(auth()->user()->code_role === '002') disabled @endif>
+
+        <option value="">Pilih Pengawas</option>
+
+        @if(auth()->user()->code_role === '001')
+            {{-- Admin melihat semua pengawas --}}
+            @foreach($pengawas as $p)
+                <option value="{{ $p->id }}" {{ old('pengawas_id') == $p->id ? 'selected' : '' }}>
+                    {{ $p->nama_lengkap }} ({{ $p->username }})
+                </option>
+            @endforeach
+        @elseif(auth()->user()->code_role === '002')
+            {{-- User biasa hanya melihat dirinya sendiri --}}
+            <option value="{{ auth()->user()->id }}" selected>
+                {{ auth()->user()->nama_lengkap }} ({{ auth()->user()->username }})
+            </option>
+            {{-- Input hidden untuk memastikan nilai terkirim --}}
+            <input type="hidden" name="pengawas_id" value="{{ auth()->user()->id }}">
+        @endif
+    </select>
+
+    @error('pengawas_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
                         <div class="mb-3">
                             <label for="mitra_id" class="form-label">Mitra</label>

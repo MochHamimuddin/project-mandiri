@@ -11,20 +11,6 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="mb-3">
-            <form action="{{ route('inspeksi.index') }}" method="GET" class="form-inline">
-                <div class="form-group mr-2">
-                    <select class="form-control" name="jenis">
-                        <option value="">Semua Jenis</option>
-                        <option value="komisioning" {{ request('jenis') == 'komisioning' ? 'selected' : '' }}>Komisioning</option>
-                        <option value="perawatan" {{ request('jenis') == 'perawatan' ? 'selected' : '' }}>Perawatan</option>
-                        <option value="evaluasi_kecepatan" {{ request('jenis') == 'evaluasi_kecepatan' ? 'selected' : '' }}>Evaluasi Kecepatan</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary mr-2">Filter</button>
-                <a href="{{ route('inspeksi.index') }}" class="btn btn-secondary">Reset</a>
-            </form>
-        </div>
 
         <div class="table-responsive">
             <table class="table table-striped">
@@ -57,20 +43,26 @@
                         <td>{{ $item->pengawas->nama_lengkap ?? 'N/A' }}</td>
                         <td>{{ $item->mitra->nama_perusahaan ?? 'N/A' }}</td>
                         <td>
+
                             <div class="btn-group">
-                                <a href="{{ route('inspeksi.show', $item->id) }}" class="btn btn-sm btn-info">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('inspeksi.edit', $item->id) }}" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('inspeksi.destroy', $item->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                @if(auth()->user()->code_role == '001' || auth()->user()->code_role == '002')
+                                    <a href="{{ route('inspeksi.show', $item->id) }}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                @endif
+
+                                @if(auth()->user()->code_role == '001')
+                                    <a href="{{ route('inspeksi.edit', $item->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('inspeksi.destroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         </td>
                     </tr>
