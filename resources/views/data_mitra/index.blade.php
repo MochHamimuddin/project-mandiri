@@ -45,7 +45,6 @@
                                 <table class="table datatable">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
                                             <th>Nama Perusahaan</th>
                                             <th>Alamat</th>
                                             <th>PIC</th>
@@ -56,7 +55,6 @@
                                     <tbody>
                                         @foreach($mitras as $mitra)
                                             <tr>
-                                                <td>{{ $mitra->id }}</td>
                                                 <td>{{ $mitra->nama_perusahaan }}</td>
                                                 <td>{{ Str::limit($mitra->alamat, 50) }}</td>
                                                 <td>

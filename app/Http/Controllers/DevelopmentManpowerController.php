@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DevelopmentManpower;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\DevelopmentManpower;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class DevelopmentManpowerController extends Controller
@@ -12,13 +13,23 @@ class DevelopmentManpowerController extends Controller
     /**
      * Dashboard dengan card kategori aktivitas
      */
-    public function dashboard()
+     public function dashboard()
     {
         $categories = DevelopmentManpower::KATEGORI_AKTIVITAS;
         $counts = [];
 
+        $user = Auth::user();
+
         foreach ($categories as $category) {
-            $counts[$category] = DevelopmentManpower::where('kategori_aktivitas', $category)->count();
+            if ($user->code_role == '001') {
+                // Admin - show all data
+                $counts[$category] = DevelopmentManpower::where('kategori_aktivitas', $category)->count();
+            } else {
+                // Regular user - show only their supervised data
+                $counts[$category] = DevelopmentManpower::where('kategori_aktivitas', $category)
+                    ->where('pengawas_id', $user->id)
+                    ->count();
+            }
         }
 
         return view('development_manpower.dashboard', compact('categories', 'counts'));
@@ -29,9 +40,20 @@ class DevelopmentManpowerController extends Controller
      */
     public function index()
     {
-        $activities = DevelopmentManpower::with(['pengawas', 'pelakuKorban', 'saksi'])
-            ->latest()
-            ->paginate(10);
+        $user = Auth::user();
+
+        if ($user->code_role == '001') {
+            // Admin - show all data
+            $activities = DevelopmentManpower::with(['pengawas', 'pelakuKorban', 'saksi'])
+                ->latest()
+                ->paginate(10);
+        } else {
+            // Regular user - show only their supervised data
+            $activities = DevelopmentManpower::with(['pengawas', 'pelakuKorban', 'saksi'])
+                ->where('pengawas_id', $user->id)
+                ->latest()
+                ->paginate(10);
+        }
 
         return view('development_manpower.index', compact('activities'));
     }

@@ -2,20 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProgramLingkunganHidup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ProgramLingkunganHidup;
 use Illuminate\Support\Facades\Storage;
 
 class ProgramLingkunganHidupController extends Controller
 {
-    /**
-     * Dashboard dengan card kategori aktivitas
-     */
-    public function dashboard()
+     public function dashboard()
     {
-        $kridaCount = ProgramLingkunganHidup::kridaArea()->count();
-        $pengelolaanCount = ProgramLingkunganHidup::pengelolaanLingkungan()->count();
-        $latestActivities = ProgramLingkunganHidup::latest()->take(5)->get();
+        $user = Auth::user();
+
+        // Count data based on user role
+        if ($user->code_role == '001') {
+            // Admin - show all data
+            $kridaCount = ProgramLingkunganHidup::kridaArea()->count();
+            $pengelolaanCount = ProgramLingkunganHidup::pengelolaanLingkungan()->count();
+            $latestActivities = ProgramLingkunganHidup::latest()->take(5)->get();
+        } else {
+            // Regular user - show only their created data
+            $kridaCount = ProgramLingkunganHidup::kridaArea()
+                ->where('created_by', $user->id)
+                ->count();
+            $pengelolaanCount = ProgramLingkunganHidup::pengelolaanLingkungan()
+                ->where('created_by', $user->id)
+                ->count();
+            $latestActivities = ProgramLingkunganHidup::where('created_by', $user->id)
+                ->latest()
+                ->take(5)
+                ->get();
+        }
 
         return view('program-lingkungan.dashboard', [
             'kridaCount' => $kridaCount,
@@ -29,7 +45,17 @@ class ProgramLingkunganHidupController extends Controller
      */
     public function index()
     {
-        $activities = ProgramLingkunganHidup::latest()->paginate(10);
+        $user = Auth::user();
+
+        if ($user->code_role == '001') {
+            // Admin - show all data
+            $activities = ProgramLingkunganHidup::latest()->paginate(10);
+        } else {
+            // Regular user - show only their created data
+            $activities = ProgramLingkunganHidup::where('created_by', $user->id)
+                ->latest()
+                ->paginate(10);
+        }
 
         return view('program-lingkungan.index', compact('activities'));
     }

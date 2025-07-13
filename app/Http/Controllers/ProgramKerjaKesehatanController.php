@@ -15,13 +15,34 @@ class ProgramKerjaKesehatanController extends Controller
      */
     public function dashboard()
     {
-        $mcuCount = ProgramKerjaKesehatan::where('jenis_program', ProgramKerjaKesehatan::MCU_TAHUNAN)->count();
-        $kronisCount = ProgramKerjaKesehatan::where('jenis_program', ProgramKerjaKesehatan::PENYAKIT_KRONIS)->count();
+        $user = Auth::user();
 
-        $latestActivities = ProgramKerjaKesehatan::with(['pengawas', 'creator'])
-            ->latest()
-            ->take(5)
-            ->get();
+        // Count data based on user role
+        if ($user->code_role == '001') {
+            // Admin - show all data
+            $mcuCount = ProgramKerjaKesehatan::where('jenis_program', ProgramKerjaKesehatan::MCU_TAHUNAN)->count();
+            $kronisCount = ProgramKerjaKesehatan::where('jenis_program', ProgramKerjaKesehatan::PENYAKIT_KRONIS)->count();
+
+            $latestActivities = ProgramKerjaKesehatan::with(['pengawas', 'creator'])
+                ->latest()
+                ->take(5)
+                ->get();
+        } else {
+            // Regular user - show only their supervised data
+            $mcuCount = ProgramKerjaKesehatan::where('jenis_program', ProgramKerjaKesehatan::MCU_TAHUNAN)
+                ->where('pengawas_id', $user->id)
+                ->count();
+
+            $kronisCount = ProgramKerjaKesehatan::where('jenis_program', ProgramKerjaKesehatan::PENYAKIT_KRONIS)
+                ->where('pengawas_id', $user->id)
+                ->count();
+
+            $latestActivities = ProgramKerjaKesehatan::with(['pengawas', 'creator'])
+                ->where('pengawas_id', $user->id)
+                ->latest()
+                ->take(5)
+                ->get();
+        }
 
         return view('program-kesehatan.dashboard', [
             'mcuCount' => $mcuCount,
@@ -32,8 +53,15 @@ class ProgramKerjaKesehatanController extends Controller
 
     public function index(Request $request)
     {
+        $user = Auth::user();
         $query = ProgramKerjaKesehatan::query()->with(['pengawas', 'creator']);
 
+        // Filter by user role
+        if ($user->code_role != '001') {
+            $query->where('pengawas_id', $user->id);
+        }
+
+        // Filter by program type if selected
         if ($request->has('jenis_program')) {
             $query->where('jenis_program', $request->jenis_program);
         }
@@ -45,6 +73,7 @@ class ProgramKerjaKesehatanController extends Controller
             'jenisProgram' => ProgramKerjaKesehatan::getJenisProgramOptions()
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource

@@ -5,8 +5,8 @@
     <!-- KPP Mining Header Image -->
     <div class="row mb-4">
         <div class="col-md-12">
-            <img src="https://www.kppmining.com/assets/images/kpp-as-the-big-company.jpg" 
-                 alt="KPP Mining Company" 
+            <img src="https://www.kppmining.com/assets/images/kpp-as-the-big-company.jpg"
+                 alt="KPP Mining Company"
                  class="img-fluid rounded shadow"
                  style="max-height: 300px; width: 100%; object-fit: cover;">
         </div>
@@ -33,7 +33,7 @@
                            class="btn btn-outline-{{ $activity['color'] }}">
                             <i class="bi bi-list"></i> Lihat
                         </a>
-                        <a href="{{ route($activity['report_route'], ['type' => $activity['type']]) }}"
+                        <a href="{{ route($activity['route'], ['type' => $activity['type']]) }}"
                            class="btn btn-outline-secondary">
                             <i class="bi bi-file-earmark-text"></i> Laporan
                         </a>
