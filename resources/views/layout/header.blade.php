@@ -22,7 +22,7 @@
             <!-- Profile Dropdown -->
             <li class="nav-item dropdown pe-3">
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="{{ asset(auth()->user()->photo ?? 'admin/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">
+                    <img src="{{ asset(auth()->user()->photo ?? 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg') }}" alt="Profile" class="rounded-circle">
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ auth()->user()->nama_lengkap }}</span>
                 </a>
 
@@ -41,20 +41,7 @@
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-person"></i>
-                            <span>Profil Saya</span>
-                        </a>
-                    </li>
-
                     @if(in_array(auth()->user()->code_role, ['001', '002']))
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-gear"></i>
-                            <span>Pengaturan</span>
-                        </a>
-                    </li>
                     @endif
 
                     <li>
