@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MitraController;
+use App\Http\Controllers\DataSibController;
 use App\Http\Controllers\FirePreventiveController;
 use App\Http\Controllers\FatigueActivityController;
 use App\Http\Controllers\InspeksiKendaraanController;
@@ -197,6 +198,15 @@ Route::prefix('fire-preventive')->group(function() {
     Route::put('/{id}', [FirePreventiveController::class, 'update'])->name('fire-preventive.update');
     Route::delete('/{id}', [FirePreventiveController::class, 'destroy'])->name('fire-preventive.destroy');
 });
+Route::prefix('data-sib')->name('data-sib.')->group(function () {
+        Route::get('/', [DataSibController::class, 'index'])->name('index');
+        Route::get('/create', [DataSibController::class, 'create'])->name('create');
+        Route::post('/', [DataSibController::class, 'store'])->name('store');
+        Route::get('/{dataSib}', [DataSibController::class, 'show'])->name('show');
+            Route::get('/{dataSib}/edit', [DataSibController::class, 'edit'])->name('edit');
+            Route::put('/{dataSib}', [DataSibController::class, 'update'])->name('update');
+            Route::delete('/{dataSib}', [DataSibController::class, 'destroy'])->name('destroy');
+    });
 });
 Route::get('/', function () {
     return redirect()->route('login');

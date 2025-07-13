@@ -2,7 +2,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
         {{-- Menu for all users --}}
         <li class="nav-item">
-            <a class="nav-link collapsed" href="/daftar-laporan">
+            <a class="nav-link collapsed" href="{{ route('daftar-laporan') }}">
                 <i class="bi bi-file-earmark-text"></i>
                 <span>Daftar Laporan</span>
             </a>
@@ -17,7 +17,20 @@
                     <span>Kelola Mitra</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('data-sib.index') }}">
+                    <i class="bi bi-building"></i>
+                    <span>Kelola SIB</span>
+                </a>
+            </li>
+        @endif
+         @if(auth()->user()->code_role === '002')
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('data-sib.create') }}">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Buat SIB Baru</span>
+                </a>
+            </li>
         @endif
     </ul>
 </aside>

@@ -47,12 +47,6 @@
             'color' => 'dark',
             'icon' => 'bi-tree-fill'
           ],
-          [
-            'name' => 'Update SIB HRA',
-            'route' => 'dashboard',
-            'color' => 'success',
-            'icon' => 'bi-arrow-repeat'
-          ]
         ];
       @endphp
 
