@@ -1,8 +1,14 @@
 <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <a class="nav-link collapsed" href="/dashboard">
+            <a class="nav-link collapsed" href="/daftar-laporan">
                 <i class="bi bi-grid"></i>
+                <span>Daftar Laporan</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/dashboard">
+                <i class="bi bi-folder2"></i>
                 <span>Dashboard</span>
             </a>
         </li>
@@ -32,10 +38,5 @@
                 <span>Daftar Mitra</span>
             </a>
         </li>
-  <a class="nav-link collapsed" href="/daftar-laporan">
-    <i class="bi bi-folder2"></i>
-    <span>Daftar Laporan</span>
-  </a>
-</li>
     </ul>
 </aside>
