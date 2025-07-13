@@ -65,9 +65,6 @@
               <h5 class="card-title mb-3">{{ $program['name'] }}</h5>
               <div class="d-flex justify-content-center gap-2">
                 <a href="{{ route($program['route']) }}" class="btn btn-{{ $program['color'] }} btn-sm">
-                  <i class="bi bi-box-arrow-in-right"></i> Masuk
-                </a>
-                <a href="{{ route($program['route']) }}" class="btn btn-{{ $program['color'] }} btn-sm">
                   <i class="bi bi-box-arrow-in-right"></i> Laporan
                 </a>
               </div>
