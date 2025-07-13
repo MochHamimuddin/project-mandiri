@@ -2,6 +2,11 @@
 @section('content')
 <section class="section dashboard">
   <div class="container">
+       <div class="row mb-4">
+      <div class="col-12">
+        <img src="https://www.kppmining.com/assets/images/kpp-home-banner.png" alt="KPP Banner" class="img-fluid rounded-3 shadow-sm w-100" style="max-height: 300px; object-fit: cover;">
+      </div>
+    </div>
     <div class="row g-4">
       @php
         $programs = [

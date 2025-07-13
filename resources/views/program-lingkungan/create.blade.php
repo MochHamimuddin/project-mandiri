@@ -53,7 +53,7 @@
                 @endif
 
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('program-lingkungan.index') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('program-lingkungan.dashboard') }}" class="btn btn-secondary">Kembali</a>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
