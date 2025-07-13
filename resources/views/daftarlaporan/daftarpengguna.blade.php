@@ -13,7 +13,7 @@
           ],
           [
             'name' => 'Traffic Management Preventive Program',
-            'route' => 'dashboard',
+            'route' => 'inspeksi.dashboard',
             'color' => 'success',
             'icon' => 'bi-traffic-light'
           ],

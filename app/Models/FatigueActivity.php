@@ -19,7 +19,7 @@ class FatigueActivity extends Model
     const TYPE_WAKEUP_CALL = 'wakeup_call';
     const TYPE_SAGA = 'saga';
     const TYPE_SIDAK = 'sidak';
-    
+
 
     public static $typeLabels = [
     self::TYPE_FTW => 'First Time Work (FTW)',
@@ -178,7 +178,6 @@ public function sendNotification(): bool
         return $this->shouldSendNotification();
     }
 
-    // ==================== RELATIONSHIPS ====================
     public function user()
     {
         return $this->belongsTo(User::class);

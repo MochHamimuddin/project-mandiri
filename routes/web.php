@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\FatigueActivityController;
+use App\Http\Controllers\InspeksiKendaraanController;
 use App\Http\Controllers\KeselamatanAreaKerjaController;
 
 Route::middleware(['inactivity', 'guest'])->group(function () {
@@ -120,12 +121,35 @@ Route::middleware(['auth', 'inactivity'])->group(function () {
         });
     });
 
+
+
     // Daftar Laporan
     Route::get('/daftar-laporan', function () {
         return view('daftarlaporan.daftarpengguna');
     })->name('daftar-laporan');
-});
 
+    Route::prefix('inspeksi')->group(function () {
+        // Dashboard khusus inspeksi
+        Route::get('/dashboard', [InspeksiKendaraanController::class, 'dashboard'])
+            ->name('inspeksi.dashboard');
+
+        // CRUD operations
+        Route::get('/', [InspeksiKendaraanController::class, 'index'])
+            ->name('inspeksi.index');
+        Route::get('/create', [InspeksiKendaraanController::class, 'create'])
+            ->name('inspeksi.create');
+        Route::post('/', [InspeksiKendaraanController::class, 'store'])
+            ->name('inspeksi.store');
+        Route::get('/{inspeksi}', [InspeksiKendaraanController::class, 'show'])
+            ->name('inspeksi.show');
+        Route::get('/{inspeksi}/edit', [InspeksiKendaraanController::class, 'edit'])
+            ->name('inspeksi.edit');
+        Route::put('/{inspeksi}', [InspeksiKendaraanController::class, 'update'])
+            ->name('inspeksi.update');
+        Route::delete('/{inspeksi}', [InspeksiKendaraanController::class, 'destroy'])
+            ->name('inspeksi.destroy');
+    });
+});
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -138,3 +162,4 @@ Route::get('/auto-logout', function() {
     return redirect()->route('login')
         ->with('message', 'Anda telah logout karena tidak aktif selama 30 menit');
 })->name('auto-logout');
+
