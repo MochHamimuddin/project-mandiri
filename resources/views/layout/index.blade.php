@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Mandiri</title>
+  <title>Laporan Kegiatan</title>
   <meta name="description" content="Your description here">
   <meta name="keywords" content="your, keywords, here">
-  <link href="{{ asset('admin/img/favicon.png') }}" rel="icon">
+  <link href="{{ asset('admin/img/kpp.png') }}" rel="icon">
   <link href="{{ asset('admin/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Nunito:300,400,600,700|Poppins:300,400,500,600,700" rel="stylesheet">
   <link href="{{ asset('admin/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
