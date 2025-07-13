@@ -34,7 +34,7 @@
         <div class="container-fluid h-custom">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                          <img src="https://seen.asia/file/logocorporate/Logo_CR-U-AA-000446530861be54ae.png"
                         class="img-fluid" alt="Sample image">
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
@@ -56,85 +56,94 @@
                                 </div>
                                 @endif
 
-                                <!-- Username Input -->
-                                <div class="form-outline mb-4">
-                                    <input type="text" id="username" name="username"
-                                        class="form-control form-control-lg @error('username') is-invalid @enderror"
-                                        placeholder="Enter your username"
-                                        value="{{ old('username') }}"
-                                        required autofocus />
-                                    <label class="form-label" for="username">Username</label>
-                                    @error('username')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                                <!-- ... head dan style tetap sama ... -->
 
-                                <!-- Full Name Input -->
-                                <div class="form-outline mb-4">
-                                    <input type="text" id="nama_lengkap" name="nama_lengkap"
-                                        class="form-control form-control-lg @error('nama_lengkap') is-invalid @enderror"
-                                        placeholder="Enter your full name"
-                                        value="{{ old('nama_lengkap') }}"
-                                        required />
-                                    <label class="form-label" for="nama_lengkap">Full Name</label>
-                                    @error('nama_lengkap')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+<!-- Ganti bagian ini saja di dalam <form> -->
 
-                                <!-- Email Input -->
-                                <div class="form-outline mb-4">
-                                    <input type="email" id="email" name="email"
-                                        class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                        placeholder="Enter your email"
-                                        value="{{ old('email') }}"
-                                        required />
-                                    <label class="form-label" for="email">Email Address</label>
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+<!-- Username -->
+<div class="form-outline mb-4">
+    <input type="text" id="username" name="username"
+        class="form-control form-control-lg @error('username') is-invalid @enderror"
+        placeholder="Enter your username"
+        value="{{ old('username') }}"
+        required />
+    <label class="form-label" for="username">Username</label>
+    @error('username')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
 
-                                <!-- Password Input -->
-                                <div class="form-outline mb-3">
-                                    <input type="password" id="password" name="password"
-                                        class="form-control form-control-lg @error('password') is-invalid @enderror"
-                                        placeholder="Enter password" required />
-                                    <label class="form-label" for="password">Password</label>
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+<!-- Full Name -->
+<div class="form-outline mb-4">
+    <input type="text" id="nama_lengkap" name="nama_lengkap"
+        class="form-control form-control-lg @error('nama_lengkap') is-invalid @enderror"
+        placeholder="Enter your full name"
+        value="{{ old('nama_lengkap') }}"
+        required />
+    <label class="form-label" for="nama_lengkap">Full Name</label>
+    @error('nama_lengkap')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
 
-                                <!-- Confirm Password Input -->
-                                <div class="form-outline mb-3">
-                                    <input type="password" id="password_confirmation" name="password_confirmation"
-                                        class="form-control form-control-lg"
-                                        placeholder="Confirm password" required />
-                                    <label class="form-label" for="password_confirmation">Confirm Password</label>
-                                </div>
+<!-- Email -->
+<div class="form-outline mb-4">
+    <input type="email" id="email" name="email"
+        class="form-control form-control-lg @error('email') is-invalid @enderror"
+        placeholder="Enter your email"
+        value="{{ old('email') }}"
+        required />
+    <label class="form-label" for="email">Email Address</label>
+    @error('email')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
 
-                                <!-- Phone Number Input -->
-                                <div class="form-outline mb-4">
-                                    <input type="text" id="no_telp" name="no_telp"
-                                        class="form-control form-control-lg @error('no_telp') is-invalid @enderror"
-                                        placeholder="Enter phone number (optional)"
-                                        value="{{ old('no_telp') }}" />
-                                    <label class="form-label" for="no_telp">Phone Number</label>
-                                    @error('no_telp')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+<!-- Password -->
+<div class="form-outline mb-3">
+    <input type="password" id="password" name="password"
+        class="form-control form-control-lg @error('password') is-invalid @enderror"
+        placeholder="Enter password" required />
+    <label class="form-label" for="password">Password</label>
+    @error('password')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
+
+<!-- Confirm Password -->
+<div class="form-outline mb-3">
+    <input type="password" id="password_confirmation" name="password_confirmation"
+        class="form-control form-control-lg"
+        placeholder="Confirm password" required />
+    <label class="form-label" for="password_confirmation">Confirm Password</label>
+</div>
+
+<!-- Phone Number (Required + Must Start with 62) -->
+<div class="form-outline mb-4">
+    <input type="text" id="no_telp" name="no_telp"
+        class="form-control form-control-lg @error('no_telp') is-invalid @enderror"
+        placeholder="Contoh: 6281234567890"
+        value="{{ old('no_telp') }}"
+        required
+        pattern="^62\d{8,13}$"
+        title="Nomor telepon harus diawali dengan 62 dan diikuti angka." />
+    <label class="form-label" for="no_telp">Phone Number</label>
+    @error('no_telp')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
+
+
 
                                 <div class="text-center text-lg-start mt-4 pt-2">
                                     <button type="submit" class="btn btn-primary btn-lg"

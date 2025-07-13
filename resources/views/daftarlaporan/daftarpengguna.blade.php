@@ -15,7 +15,7 @@
             'name' => 'Traffic Management Preventive Program',
             'route' => 'inspeksi.dashboard',
             'color' => 'success',
-            'icon' => 'bi-traffic-light'
+            'icon' => 'bi-check-circle'
           ],
           [
             'name' => 'Keselamatan Area Kerja',
@@ -46,18 +46,24 @@
             'route' => 'dashboard',
             'color' => 'dark',
             'icon' => 'bi-tree-fill'
+          ],
+          [
+            'name' => 'Update SIB HRA',
+            'route' => 'dashboard',
+            'color' => 'success',
+            'icon' => 'bi-arrow-repeat'
           ]
         ];
       @endphp
 
       @foreach($programs as $program)
         <div class="col-sm-6 col-md-4 col-lg-3">
-          <div class="card info-card {{ $program['color'] }}-card">
-            <div class="card-body text-center">
-              <div class="card-icon">
+          <div class="card info-card {{ $program['color'] }}-card shadow-sm rounded-3">
+            <div class="card-body text-center p-4">
+              <div class="card-icon mb-3 text-{{ $program['color'] }}">
                 <i class="bi {{ $program['icon'] }}"></i>
               </div>
-              <h5 class="card-title">{{ $program['name'] }}</h5>
+              <h5 class="card-title mb-3">{{ $program['name'] }}</h5>
               <div class="d-flex justify-content-center gap-2">
                 <a href="{{ route($program['route']) }}" class="btn btn-{{ $program['color'] }} btn-sm">
                   <i class="bi bi-box-arrow-in-right"></i> Masuk
@@ -75,18 +81,35 @@
 </section>
 
 <style>
-  .card-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: var(--bs-{{ $program['color'] }});
-  }
   .card {
     transition: transform 0.3s;
     height: 100%;
+    margin-bottom: 1rem;
   }
+
   .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-body {
+    padding: 1.5rem !important;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .gap-2 {
+    gap: 0.75rem !important;
   }
 </style>
 @endsection

@@ -1,9 +1,9 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
     <!-- Logo Section -->
     <div class="d-flex align-items-center justify-content-between">
-        <a href="{{ route('dashboard') }}" class="logo d-flex align-items-center">
-            <img src="{{ asset('admin/img/logo.png') }}" alt="Logo">
-            <span class="d-none d-lg-block">Project Mandiri</span>
+        <a href="{{ route('daftar-laporan') }}" class="logo d-flex align-items-center">
+            <img src="https://seen.asia/file/logocorporate/Logo_CR-U-AA-000446530861be54ae.png" alt="Logo">
+            <span class="d-none d-lg-block">Laporan Kegiatan</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
