@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Mandiri</title>
+  <title>Laporan Kegiatan</title>
   <meta name="description" content="Your description here">
   <meta name="keywords" content="your, keywords, here">
   <link href="{{ asset('admin/img/favicon.png') }}" rel="icon">
