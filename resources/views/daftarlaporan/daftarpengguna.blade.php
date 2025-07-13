@@ -25,25 +25,25 @@
           ],
           [
             'name' => 'Fire Prevention Management Program',
-            'route' => 'dashboard',
+            'route' => 'fire-preventive.dashboard',
             'color' => 'danger',
             'icon' => 'bi-fire'
           ],
           [
             'name' => 'Development Manpower',
-            'route' => 'dashboard',
+            'route' => 'development-manpower.dashboard',
             'color' => 'info',
             'icon' => 'bi-people-fill'
           ],
           [
             'name' => 'Program Kerja Kesehatan',
-            'route' => 'keselamatan.dashboard',
+            'route' => 'program-kesehatan.dashboard',
             'color' => 'secondary',
             'icon' => 'bi-heart-pulse'
           ],
           [
             'name' => 'Program Kerja Lingkungan Hidup',
-            'route' => 'dashboard',
+            'route' => 'program-lingkungan.dashboard',
             'color' => 'dark',
             'icon' => 'bi-tree-fill'
           ],

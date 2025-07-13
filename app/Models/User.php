@@ -44,5 +44,24 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'pengawas_id');
     }
+    // Di dalam App\Models\User
+
+    // Relasi sebagai pengawas
+    public function pengawasanManpower()
+    {
+        return $this->hasMany(DevelopmentManpower::class, 'pengawas_id');
+    }
+
+    // Relasi sebagai pelaku/korban
+    public function sebagaiPelakuKorban()
+    {
+        return $this->hasMany(DevelopmentManpower::class, 'pelaku_korban_id');
+    }
+
+    // Relasi sebagai saksi
+    public function sebagaiSaksi()
+    {
+        return $this->hasMany(DevelopmentManpower::class, 'saksi_id');
+    }
 }
 

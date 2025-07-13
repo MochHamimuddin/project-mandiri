@@ -3,9 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MitraController;
+use App\Http\Controllers\FirePreventiveController;
 use App\Http\Controllers\FatigueActivityController;
 use App\Http\Controllers\InspeksiKendaraanController;
+use App\Http\Controllers\DevelopmentManpowerController;
 use App\Http\Controllers\KeselamatanAreaKerjaController;
+use App\Http\Controllers\ProgramKerjaKesehatanController;
+use App\Http\Controllers\ProgramLingkunganHidupController;
 
 Route::middleware(['inactivity', 'guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -149,6 +153,50 @@ Route::middleware(['auth', 'inactivity'])->group(function () {
         Route::delete('/{inspeksi}', [InspeksiKendaraanController::class, 'destroy'])
             ->name('inspeksi.destroy');
     });
+    Route::prefix('development-manpower')->group(function () {
+    Route::get('/dashboard', [DevelopmentManpowerController::class, 'dashboard'])->name('development-manpower.dashboard');
+    Route::get('/', [DevelopmentManpowerController::class, 'index'])->name('development-manpower.index');
+    Route::get('/create/{kategori}', [DevelopmentManpowerController::class, 'create'])
+        ->where('kategori', '.*')
+        ->name('development-manpower.create');
+    Route::post('/', [DevelopmentManpowerController::class, 'store'])->name('development-manpower.store');
+    Route::get('/{development_manpower}', [DevelopmentManpowerController::class, 'show'])->name('development-manpower.show');
+    Route::get('/{development_manpower}/edit', [DevelopmentManpowerController::class, 'edit'])->name('development-manpower.edit');
+    Route::put('/{development_manpower}', [DevelopmentManpowerController::class, 'update'])->name('development-manpower.update');
+    Route::delete('/{development_manpower}', [DevelopmentManpowerController::class, 'destroy'])->name('development-manpower.destroy');
+});
+Route::prefix('program-kesehatan')->group(function() {
+    Route::get('/dashboard', [ProgramKerjaKesehatanController::class, 'dashboard'])->name('program-kesehatan.dashboard');
+    Route::get('/', [ProgramKerjaKesehatanController::class, 'index'])->name('program-kesehatan.index');
+    Route::get('/create', [ProgramKerjaKesehatanController::class, 'create'])->name('program-kesehatan.create');
+    Route::post('/', [ProgramKerjaKesehatanController::class, 'store'])->name('program-kesehatan.store');
+    Route::get('/{programKerjaKesehatan}', [ProgramKerjaKesehatanController::class, 'show'])->name('program-kesehatan.show');
+    Route::get('/{programKerjaKesehatan}/edit', [ProgramKerjaKesehatanController::class, 'edit'])->name('program-kesehatan.edit');
+    Route::put('/{programKerjaKesehatan}', [ProgramKerjaKesehatanController::class, 'update'])->name('program-kesehatan.update');
+    Route::delete('/{programKerjaKesehatan}', [ProgramKerjaKesehatanController::class, 'destroy'])->name('program-kesehatan.destroy');
+    Route::get('/{program}/download/{type}', [ProgramKerjaKesehatanController::class, 'downloadFile'])->name('program-kesehatan.download');
+});
+Route::prefix('program-lingkungan')->group(function () {
+    Route::get('dashboard', [ProgramLingkunganHidupController::class, 'dashboard'])->name('program-lingkungan.dashboard');
+    Route::get('/', [ProgramLingkunganHidupController::class, 'index'])->name('program-lingkungan.index');
+    Route::get('create/{jenis}', [ProgramLingkunganHidupController::class, 'create'])->name('program-lingkungan.create');
+    Route::post('/', [ProgramLingkunganHidupController::class, 'store'])->name('program-lingkungan.store');
+    Route::put('program-lingkungan/{programLingkunganHidup}', [ProgramLingkunganHidupController::class, 'update'])
+    ->name('program-lingkungan.update');
+    Route::get('{programLingkunganHidup}', [ProgramLingkunganHidupController::class, 'show'])->name('program-lingkungan.show');
+    Route::get('{programLingkunganHidup}/edit', [ProgramLingkunganHidupController::class, 'edit'])->name('program-lingkungan.edit');
+    Route::delete('{programLingkunganHidup}', [ProgramLingkunganHidupController::class, 'destroy'])->name('program-lingkungan.destroy');
+});
+Route::prefix('fire-preventive')->group(function() {
+    Route::get('/dashboard', [FirePreventiveController::class, 'dashboard'])->name('fire-preventive.dashboard');
+    Route::get('/', [FirePreventiveController::class, 'index'])->name('fire-preventive.index');
+    Route::get('/create/{type}', [FirePreventiveController::class, 'create'])->name('fire-preventive.create');
+    Route::post('/', [FirePreventiveController::class, 'store'])->name('fire-preventive.store');
+    Route::get('/{id}', [FirePreventiveController::class, 'show'])->name('fire-preventive.show');
+    Route::get('/{id}/edit', [FirePreventiveController::class, 'edit'])->name('fire-preventive.edit');
+    Route::put('/{id}', [FirePreventiveController::class, 'update'])->name('fire-preventive.update');
+    Route::delete('/{id}', [FirePreventiveController::class, 'destroy'])->name('fire-preventive.destroy');
+});
 });
 Route::get('/', function () {
     return redirect()->route('login');
