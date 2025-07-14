@@ -7,8 +7,7 @@
             <h2>Detail Aktivitas</h2>
         </div>
         <div class="col-md-6 text-end">
-            <a href="{{ route('keselamatan.type.index', ['type' => $activity->activity_type]) }}"
-               class="btn btn-secondary">
+            <a href="{{ route('keselamatan.type.index', ['type' => $activity->activity_type]) }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
         </div>
@@ -61,10 +60,8 @@
                     <div class="mb-3">
                         <label class="form-label">Foto</label>
                         <div>
-                            <img src="{{ Storage::url($activity->path_foto) }}" alt="Foto Aktivitas"
-                                 class="img-fluid rounded" style="max-height: 200px;">
-                            <a href="{{ Storage::url($activity->path_foto) }}" target="_blank"
-                               class="btn btn-sm btn-info ms-2">
+                            <img src="{{ Storage::url($activity->path_foto) }}" alt="Foto Aktivitas" class="img-fluid rounded" style="max-height: 200px;">
+                            <a href="{{ Storage::url($activity->path_foto) }}" target="_blank" class="btn btn-sm btn-info ms-2">
                                 <i class="bi bi-download"></i> Unduh
                             </a>
                         </div>
@@ -75,12 +72,9 @@
                     <div class="mb-3">
                         <label class="form-label">Dokumen Pendukung</label>
                         <div>
-                            @if($activity->path_file)
                             <a href="{{ asset('storage/'.$activity->path_file) }}" target="_blank" class="btn btn-outline-primary">
                                 <i class="bi bi-file-earmark"></i> Lihat Dokumen
                             </a>
-                            @endif
-
                         </div>
                     </div>
                     @endif
@@ -89,8 +83,9 @@
 
             <div class="mt-3 d-flex justify-content-end gap-2">
                 <a href="{{ route('keselamatan.edit', ['activity' => $activity->id]) }}" class="btn btn-warning">
-                <button class="btn btn-{{ $activity->is_approved ? 'warning' : 'success' }}"
-                        onclick="toggleApproval({{ $activity->id }})">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <button class="btn btn-{{ $activity->is_approved ? 'warning' : 'success' }}" onclick="toggleApproval({{ $activity->id }})">
                     <i class="bi bi-{{ $activity->is_approved ? 'x-circle' : 'check-circle' }}"></i>
                     {{ $activity->is_approved ? 'Batalkan Persetujuan' : 'Setujui' }}
                 </button>
