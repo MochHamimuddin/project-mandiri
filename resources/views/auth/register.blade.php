@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Laporan Kegiatan</title>
+    <title>SUBCONT & SIB</title>
+    <link href="{{ asset('admin/img/kpp.png') }}" rel="icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -315,6 +316,9 @@
                                                 required
                                                 minlength="8" />
                                             <label for="password">Password</label>
+                                             <div class="fas">
+                                                    <span>.</span>
+                                                </div>
                                             <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                                             <div class="invalid-feedback">
                                                 Password must be at least 8 characters.
@@ -328,10 +332,6 @@
                                                 <div class="requirement" id="numberReq">
                                                     <i class="fas fa-circle"></i>
                                                     <span>Contains a number</span>
-                                                </div>
-                                                <div class="requirement" id="specialReq">
-                                                    <i class="fas fa-circle"></i>
-                                                    <span>Contains a special character</span>
                                                 </div>
                                             </div>
                                         </div>

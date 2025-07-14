@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('daftar-laporan') }}" class="logo d-flex align-items-center">
             <img src="https://seen.asia/file/logocorporate/Logo_CR-U-AA-000446530861be54ae.png" alt="Logo">
-            <span class="d-none d-lg-block">Laporan Kegiatan</span>
+            <span class="d-none d-lg-block">SUBCONT & SIB</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
