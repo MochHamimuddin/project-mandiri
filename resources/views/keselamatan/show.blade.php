@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <div class="mt-3 d-flex justify-content-end gap-2">
+            <!-- <div class="mt-3 d-flex justify-content-end gap-2">
                 <a href="{{ route('keselamatan.edit', ['activity' => $activity->id]) }}" class="btn btn-warning">
                     <i class="bi bi-pencil"></i> Edit
                 </a>
@@ -89,7 +89,7 @@
                     <i class="bi bi-{{ $activity->is_approved ? 'x-circle' : 'check-circle' }}"></i>
                     {{ $activity->is_approved ? 'Batalkan Persetujuan' : 'Setujui' }}
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
