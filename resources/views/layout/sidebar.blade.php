@@ -32,5 +32,13 @@
                 </a>
             </li>
         @endif
+        @if(auth()->user()->username === 'superadmin_kppmining')
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('users.index') }}">
+                    <i class="bi bi-building"></i>
+                    <span>Kelola Admin</span>
+                </a>
+            </li>
+            @endif
     </ul>
 </aside>

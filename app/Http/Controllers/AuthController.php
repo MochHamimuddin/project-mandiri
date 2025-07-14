@@ -88,6 +88,7 @@ class AuthController extends Controller
         ],
         'no_telp' => 'nullable|max:20'
     ], [
+        'username.unique' => 'username sudah di pakai!',
         'password.confirmed' => 'Konfirmasi password tidak cocok',
         'password.min' => 'Password minimal 8 karakter'
     ]);

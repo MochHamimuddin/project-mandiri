@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\DataSibController;
 use App\Http\Controllers\FirePreventiveController;
@@ -207,6 +208,15 @@ Route::prefix('data-sib')->name('data-sib.')->group(function () {
             Route::put('/{dataSib}', [DataSibController::class, 'update'])->name('update');
             Route::delete('/{dataSib}', [DataSibController::class, 'destroy'])->name('destroy');
     });
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/users/trashed', [UserController::class, 'trashed'])->name('users.trashed');
+    Route::post('/users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
 });
 Route::get('/', function () {
     return redirect()->route('login');
