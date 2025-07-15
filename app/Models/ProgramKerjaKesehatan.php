@@ -32,7 +32,36 @@ class ProgramKerjaKesehatan extends Model
         'tanggal_upload' => 'datetime',
     ];
 
-    protected $appends = ['jenis_program_label'];
+    protected $appends = [
+        'jenis_program_label',
+        'deadline_time_wib',
+        'is_uploaded',
+        'should_send_notification'];
+
+
+    // ==================== CORE METHODS ====================
+    public function shouldSendNotification(): bool
+{
+    // 1. Skip jika sudah di-upload atau tidak ada nomor telepon
+    if ($this->is_uploaded || empty($this->user->no_telp)) {
+        return false;
+    }
+
+    $deadline = $this->getDeadlineInCarbon();
+    $now = now('Asia/Jakarta');
+
+    // 2. Jika sudah melewati deadline, STOP notifikasi
+    if ($now->greaterThanOrEqualTo($deadline)) {
+        logger()->info("Deadline passed for activity {$this->id}");
+        return false;
+    }
+
+    // 3. Kirim notifikasi hanya dalam 30 menit terakhir sebelum deadline
+    $notificationWindowStart = $deadline->copy()->subMinutes(30);
+    return $now->between($notificationWindowStart, $deadline);
+}
+
+
 
     /**
      * Accessor untuk label jenis program

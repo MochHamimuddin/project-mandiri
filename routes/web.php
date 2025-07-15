@@ -231,3 +231,45 @@ Route::get('/auto-logout', function() {
         ->with('message', 'Anda telah logout karena tidak aktif selama 30 menit');
 })->name('auto-logout');
 
+Route::get('/test-fonnte', function() {
+    // Verify API configuration
+    if (!config('services.fonnte.key') || !config('services.fonnte.url')) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'API configuration missing'
+        ], 500);
+    }
+
+    // Test parameters
+    $testPhone = '6281234567890'; // Replace with your test number
+    $testMessage = 'Test message from Laravel at ' . now()->format('Y-m-d H:i:s');
+
+    try {
+        $response = Http::withHeaders([
+            'Authorization' => config('services.fonnte.key'),
+        ])
+        ->timeout(10)
+        ->post(config('services.fonnte.url').'/send', [
+            'target' => $testPhone,
+            'message' => $testMessage,
+            'countryCode' => '62'
+        ]);
+
+        return response()->json([
+            'status' => $response->successful() ? 'success' : 'error',
+            'http_status' => $response->status(),
+            'response' => $response->json(),
+            'request' => [
+                'phone' => $testPhone,
+                'message' => $testMessage
+            ]
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'trace' => $e->getTrace()
+        ], 500);
+    }
+});

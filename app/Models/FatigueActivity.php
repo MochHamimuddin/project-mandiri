@@ -20,32 +20,32 @@ class FatigueActivity extends Model
     const TYPE_SAGA = 'saga';
     const TYPE_SIDAK = 'sidak';
 
-
     public static $typeLabels = [
-    self::TYPE_FTW => 'First Time Work (FTW)',
-    self::TYPE_DFIT => 'Evaluasi D-Fit',
-    self::TYPE_FATIGUE_CHECK => 'Fatigue Check',
-    self::TYPE_WAKEUP_CALL => 'Wake Up Call',
-    self::TYPE_SAGA => 'Inspeksi SAGA',
-    self::TYPE_SIDAK => 'Sidak Napping'
-];
-public static $validActivityTypes = [
-    self::TYPE_FTW,
-    self::TYPE_DFIT,
-    self::TYPE_FATIGUE_CHECK,
-    self::TYPE_WAKEUP_CALL,
-    self::TYPE_SAGA,
-    self::TYPE_SIDAK
-];
+        self::TYPE_FTW => 'First Time Work (FTW)',
+        self::TYPE_DFIT => 'Evaluasi D-Fit',
+        self::TYPE_FATIGUE_CHECK => 'Fatigue Check',
+        self::TYPE_WAKEUP_CALL => 'Wake Up Call',
+        self::TYPE_SAGA => 'Inspeksi SAGA',
+        self::TYPE_SIDAK => 'Sidak Napping'
+    ];
 
-    // Activity Deadlines (WIB Time)
-    protected static $activityDeadlines = [
-        self::TYPE_FTW => '03:00',
-        self::TYPE_DFIT => '07:00',
-        self::TYPE_FATIGUE_CHECK => '08:00',
-        self::TYPE_WAKEUP_CALL => '09:00',
-        self::TYPE_SAGA => '10:00',
-        self::TYPE_SIDAK => '11:00'
+    public static $validActivityTypes = [
+        self::TYPE_FTW,
+        self::TYPE_DFIT,
+        self::TYPE_FATIGUE_CHECK,
+        self::TYPE_WAKEUP_CALL,
+        self::TYPE_SAGA,
+        self::TYPE_SIDAK
+    ];
+
+    // Activity Deadlines (WIB Time) - daily fixed time
+    public static $dailyDeadlines = [
+        self::TYPE_FTW => '04:52',
+        self::TYPE_DFIT => '04:54',
+        self::TYPE_FATIGUE_CHECK => '04:57',
+        self::TYPE_WAKEUP_CALL => '04:58',
+        self::TYPE_SAGA => '05:00',
+        self::TYPE_SIDAK => '05:03'
     ];
 
     protected $table = 'fatigue_activities';
@@ -73,104 +73,116 @@ public static $validActivityTypes = [
         'should_send_notification'
     ];
 
-    // ==================== CORE METHODS ====================
     public function shouldSendNotification(): bool
-{
-    // 1. Skip jika sudah di-upload atau tidak ada nomor telepon
-    if ($this->is_uploaded || empty($this->user->no_telp)) {
-        return false;
+    {
+        // Skip jika sudah upload
+        if ($this->is_uploaded) {
+            return false;
+        }
+
+        // Skip jika user tidak ada nomor WA
+        if (empty($this->user->no_telp)) {
+            return false;
+        }
+
+        // Skip jika user sudah memiliki data aktivitas yang lengkap hari ini
+        if ($this->userHasCompleteActivityToday()) {
+            return false;
+        }
+
+        $now = now('Asia/Jakarta');
+        $todayDeadline = $this->getTodayDeadline();
+
+        // Hanya kirim jika sekarang sudah lewat deadline hari ini
+        if ($now->lessThan($todayDeadline)) {
+            return false;
+        }
+
+        // Cek apakah sudah pernah dikirim hari ini
+        $cacheKey = $this->getNotificationCacheKey();
+        return !Cache::has($cacheKey);
     }
 
-    $deadline = $this->getDeadlineInCarbon();
-    $now = now('Asia/Jakarta');
-
-    // 2. Jika sudah melewati deadline, STOP notifikasi
-    if ($now->greaterThanOrEqualTo($deadline)) {
-        logger()->info("Deadline passed for activity {$this->id}");
-        return false;
+    /**
+     * Check if user already has complete activity data for today
+     */
+    protected function userHasCompleteActivityToday(): bool
+    {
+        return static::where('user_id', $this->user_id)
+            ->where('activity_type', $this->activity_type)
+            ->whereDate('created_at', now('Asia/Jakarta')->toDateString())
+            ->whereNotNull('photo_path')
+            ->exists();
     }
 
-    // 3. Kirim notifikasi hanya dalam 30 menit terakhir sebelum deadline
-    $notificationWindowStart = $deadline->copy()->subMinutes(30);
-    return $now->between($notificationWindowStart, $deadline);
-}
-
-public function sendNotification(): bool
-{
-    if (!$this->shouldSendNotification()) {
-        logger()->info("Notification skipped for activity {$this->id}", [
-            'reason' => 'Outside notification window or conditions not met',
-            'deadline' => $this->deadline_time_wib,
-            'current_time' => now('Asia/Jakarta')->format('Y-m-d H:i:s'),
-            'window_start' => $this->getDeadlineInCarbon()->subMinutes(30)->format('Y-m-d H:i:s')
-        ]);
-        return false;
-    }
-
-    $cacheKey = "activity_{$this->activity_type}_{$this->user_id}_last_notification";
-
-    // Cek cache untuk jeda 5 menit (diperpendek dari 30 menit)
-    if (Cache::has($cacheKey)) {
-        logger()->info("Notification throttled (5-minute cooldown) for activity {$this->id}");
-        return false;
-    }
-
-    try {
-        $service = new WhatsappNotificationService();
-        $sent = $service->sendDeadlineReminder(
-            $this->user->no_telp,
-            $this->activity_type_label,
-            $this->deadline_time_wib
+    /**
+     * Get cache key for notification tracking
+     */
+    protected function getNotificationCacheKey(): string
+    {
+        return sprintf('fatigue_notif_%s_%s_%s',
+            $this->user_id,
+            $this->activity_type,
+            now('Asia/Jakarta')->format('Y-m-d')
         );
+    }
 
-        if ($sent) {
-            // Set cache hanya untuk 5 menit
-            Cache::put($cacheKey, now(), now()->addMinutes(5));
-            logger()->info("Notification sent for {$this->activity_type} to {$this->user->no_telp}");
+    public function sendNotification(): bool
+    {
+        if (!$this->shouldSendNotification()) {
+            return false;
+        }
+
+        $service = new WhatsappNotificationService();
+        $message = $this->getNotificationMessage();
+
+        if ($service->sendMessage($this->user->no_telp, $message)) {
+            Cache::put(
+                $this->getNotificationCacheKey(),
+                true,
+                now()->addDay()
+            );
             return true;
         }
 
-        logger()->error("Failed to send notification for {$this->activity_type}");
-        return false;
-
-    } catch (\Exception $e) {
-        logger()->error("WhatsApp API error: " . $e->getMessage());
         return false;
     }
-}
 
-    // ==================== HELPER METHODS ====================
-    protected function getDeadlineInCarbon(): Carbon
+    protected function getNotificationMessage(): string
     {
-        $deadlineTime = self::$activityDeadlines[$this->activity_type] ?? '06:00';
+        return sprintf(
+            "⚠️ **Peringatan!** Aktivitas %s belum diupload. Deadline: %s WIB",
+            $this->activity_type_label,
+            $this->getTodayDeadline()->format('H:i')
+        );
+    }
+
+    /**
+     * Get today's deadline (daily fixed time)
+     */
+    protected function getTodayDeadline(): Carbon
+    {
+        $deadlineTime = self::$dailyDeadlines[$this->activity_type] ?? '23:59';
         [$hours, $minutes] = explode(':', $deadlineTime);
 
-        return Carbon::parse($this->created_at)
-            ->timezone('Asia/Jakarta')
-            ->setTime($hours, $minutes);
+        return Carbon::now('Asia/Jakarta')
+            ->setTime($hours, $minutes, 0);
     }
 
     // ==================== ACCESSORS ====================
     public function getActivityTypeLabelAttribute(): string
     {
-        return [
-            self::TYPE_FTW => 'First Time Work (FTW)',
-            self::TYPE_DFIT => 'Evaluasi D-Fit',
-            self::TYPE_FATIGUE_CHECK => 'Fatigue Check',
-            self::TYPE_WAKEUP_CALL => 'Wake Up Call',
-            self::TYPE_SAGA => 'Inspeksi SAGA',
-            self::TYPE_SIDAK => 'Sidak Napping'
-        ][$this->activity_type] ?? 'Unknown Activity';
+        return self::$typeLabels[$this->activity_type] ?? 'Unknown Activity';
     }
 
     public function getDeadlineTimeWibAttribute(): string
     {
-        return $this->getDeadlineInCarbon()->format('d M Y H:i') . ' WIB';
+        return $this->getTodayDeadline()->format('d M Y H:i') . ' WIB';
     }
 
     public function getIsUploadedAttribute(): bool
     {
-        return !empty($this->result_path);
+        return !empty($this->photo_path);
     }
 
     public function getShouldSendNotificationAttribute(): bool
@@ -178,6 +190,7 @@ public function sendNotification(): bool
         return $this->shouldSendNotification();
     }
 
+    // ==================== RELATIONSHIPS ====================
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -198,7 +211,8 @@ public function sendNotification(): bool
         return $this->belongsTo(Mitra::class);
     }
 
-     public function scopeOfType($query, $type)
+    // ==================== QUERY SCOPES ====================
+    public function scopeOfType($query, $type)
     {
         return $query->where('activity_type', $type);
     }
@@ -208,14 +222,58 @@ public function sendNotification(): bool
         return $query->whereNull('deleted_at');
     }
 
-
-    // ==================== QUERY SCOPES ====================
     public function scopePendingNotifications($query)
     {
         return $query->with('user')
-            ->whereNull('result_path')
+            ->whereNull('photo_path')
             ->whereHas('user', function($q) {
                 $q->whereNotNull('no_telp');
+            });
+    }
+
+    public function scopeDueForNotification($query)
+    {
+        $now = now('Asia/Jakarta');
+
+        return $query->whereHas('user', function($q) {
+                $q->whereNotNull('no_telp');
+            })
+            ->whereNull('photo_path')
+            ->where(function($q) use ($now) {
+                foreach (self::$dailyDeadlines as $type => $time) {
+                    [$hours, $minutes] = explode(':', $time);
+                    $deadlineToday = Carbon::today('Asia/Jakarta')->setTime($hours, $minutes, 0);
+                    if ($now->greaterThanOrEqualTo($deadlineToday)) {
+                        $q->orWhere('activity_type', $type);
+                    }
+                }
+            });
+    }
+
+    /**
+     * Scope to find users who need notifications
+     */
+    public function scopeNeedNotification($query)
+    {
+        $now = now('Asia/Jakarta');
+        $today = $now->toDateString();
+
+        return $query->whereNull('photo_path')
+            ->whereHas('user', function($q) {
+                $q->whereNotNull('no_telp');
+            })
+            ->whereDoesntHave('user.fatigueActivities', function($q) use ($today) {
+                $q->whereDate('created_at', $today)
+                    ->whereNotNull('photo_path');
+            })
+            ->where(function($q) use ($now) {
+                foreach (self::$dailyDeadlines as $type => $time) {
+                    [$hours, $minutes] = explode(':', $time);
+                    $deadlineToday = Carbon::today('Asia/Jakarta')->setTime($hours, $minutes, 0);
+                    if ($now->greaterThanOrEqualTo($deadlineToday)) {
+                        $q->orWhere('activity_type', $type);
+                    }
+                }
             });
     }
 }

@@ -31,9 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'fonnte' => [
-        'key' => env('FONNTE_API_KEY'),
-        'url' => env('FONNTE_BASE_URL'),
-        'device_id' => env('FONNTE_DEVICE_ID'),
+        'key' => env('FONNTE_KEY'),
+        'url' => env('FONNTE_URL'),
     ],
 
 ];

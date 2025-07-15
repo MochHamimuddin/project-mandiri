@@ -63,5 +63,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(DevelopmentManpower::class, 'saksi_id');
     }
+    public function fatigueActivities()
+{
+    return $this->hasMany(FatigueActivity::class);
 }
+}
+
 
