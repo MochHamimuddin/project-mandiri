@@ -102,6 +102,7 @@ class Mitra extends Model
         $this->attributes['nama_perusahaan'] = ucwords(strtolower($value));
     }
 
+
     /**
      * Helper Methods
      */

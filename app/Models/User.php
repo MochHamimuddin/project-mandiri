@@ -19,6 +19,7 @@ class User extends Authenticatable
         'password',
         'no_telp',
         'code_role',
+        'data_mitra_id',
         'updated_at',
         'updated_by',
         'created_at',
@@ -64,29 +65,35 @@ class User extends Authenticatable
         return $this->hasMany(DevelopmentManpower::class, 'saksi_id');
     }
     public function fatigueActivities()
-{
-    return $this->hasMany(FatigueActivity::class);
-}
+    {
+        return $this->hasMany(FatigueActivity::class);
+    }
 
-public function firePreventive()
-{
-    return $this->hasMany(FirePreventiveManagement::class, 'supervisor_id');
-}
+    public function firePreventive()
+    {
+        return $this->hasMany(FirePreventiveManagement::class, 'supervisor_id');
+    }
 
-public function programKesehatan()
-{
-    return $this->hasMany(ProgramKerjaKesehatan::class, 'pengawas_id');
-}
+    public function programKesehatan()
+    {
+        return $this->hasMany(ProgramKerjaKesehatan::class, 'pengawas_id');
+    }
 
-public function programLingkungan()
-{
-    return $this->hasMany(programLingkunganHidup::class, 'pelaksana');
-}
+    public function programLingkungan()
+    {
+        return $this->hasMany(programLingkunganHidup::class, 'pelaksana');
+    }
 
-public function developmentManpower()
-{
-    return $this->hasMany(developmentManpower::class, 'pengawas_id');
-}
+    public function developmentManpower()
+    {
+        return $this->hasMany(developmentManpower::class, 'pengawas_id');
+    }
+
+
+    public function mitra()
+    {
+        return $this->belongsTo(Mitra::class, 'data_mitra_id');
+    }
 }
 
 

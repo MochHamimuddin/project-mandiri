@@ -72,26 +72,29 @@ class AuthController extends Controller
 
     public function showRegisterForm()
     {
-        return view('auth.register');
+        $mitras = \App\Models\Mitra::active()->orderBy('nama_perusahaan')->get();
+        return view('auth.register',compact('mitras'));
     }
 
     public function register(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'username' => 'required|unique:data_users|max:255',
-        'nama_lengkap' => 'required|max:255',
-        'email' => 'required|email|unique:data_users|max:255',
-        'password' => [
-            'required',
-            'confirmed',
-            'min:8'
-        ],
-        'no_telp' => 'nullable|max:20'
-    ], [
-        'username.unique' => 'username sudah di pakai!',
-        'password.confirmed' => 'Konfirmasi password tidak cocok',
-        'password.min' => 'Password minimal 8 karakter'
-    ]);
+    'username' => 'required|unique:data_users|max:255',
+    'nama_lengkap' => 'required|max:255',
+    'email' => 'required|email|unique:data_users|max:255',
+    'password' => [
+        'required',
+        'confirmed',
+        'min:8'
+    ],
+    'no_telp' => 'nullable|max:20',
+    'data_mitra_id' => 'nullable|exists:data_mitra,id',
+], [
+    'username.unique' => 'username sudah di pakai!',
+    'password.confirmed' => 'Konfirmasi password tidak cocok',
+    'password.min' => 'Password minimal 8 karakter',
+    'data_mitra_id.exists' => 'Mitra tidak ditemukan',
+]);
     if ($request->wantsJson() || $request->ajax()) {
         if ($validator->fails()) {
             return response()->json([
@@ -107,6 +110,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'no_telp' => $request->no_telp,
                 'code_role' => '002',
+                'data_mitra_id' => $request->data_mitra_id,
             ]);
 
             Auth::login($user);

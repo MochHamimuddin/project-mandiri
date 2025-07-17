@@ -106,6 +106,24 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label for="data_mitra_id" class="col-sm-3 col-form-label">Mitra</label>
+                            <div class="col-sm-9">
+                                <select class="form-select" id="data_mitra_id" name="data_mitra_id">
+                                    <option value="">Pilih Perusahaan</option>
+                                    @foreach($mitras as $mitra)
+                                        <option value="{{ $mitra->id }}" {{ old('data_mitra_id', $user->data_mitra_id) == $mitra->id ? 'selected' : '' }}>
+                                            {{ $mitra->nama_perusahaan }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('data_mitra_id')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-save"></i> Update

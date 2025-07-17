@@ -70,7 +70,7 @@
                                                 </td>
                                                 <td>
                                                     <span class="badge bg-info">
-                                                        <i class="bi bi-person-plus"></i> {{ $mitra->created_by ?? 'System' }}
+                                                        <i class="bi bi-person-plus"></i> {{ $mitra->creator->nama_lengkap ?? 'System' }}
                                                     </span>
                                                 </td>
                                                 <td>

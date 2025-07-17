@@ -40,9 +40,9 @@ class UserController extends Controller
         if (!$this->isSuperadminKppMining()) {
             abort(403, 'Unauthorized access. Only superadmin_kppmining can access this page.');
         }
-
         $roles = Role::all();
-        return view('users.create', compact('roles'));
+        $mitras = \App\Models\Mitra::active()->orderBy('nama_perusahaan')->get();
+        return view('users.create', compact('roles','mitras'));
     }
 
     /**
@@ -60,6 +60,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:data_users|max:100',
             'password' => 'required|string|min:8|confirmed',
             'no_telp' => 'nullable|string|max:20',
+            'data_mitra_id' => 'nullable|exists:data_mitra,id',
             'code_role' => 'required|exists:data_role,code_role',
         ]);
 
@@ -76,6 +77,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'no_telp' => $request->no_telp,
             'code_role' => $request->code_role,
+            'data_mitra_id' => $request->data_mitra_id,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
         ]);
@@ -94,7 +96,8 @@ class UserController extends Controller
         }
 
         $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
+        $mitras = \App\Models\Mitra::active()->orderBy('nama_perusahaan')->get();
+        return view('users.edit', compact('user', 'roles','mitras'));
     }
 
     /**
@@ -112,6 +115,7 @@ class UserController extends Controller
             'email' => 'required|email|max:100|unique:data_users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'no_telp' => 'nullable|string|max:20',
+            'data_mitra_id' => 'nullable|exists:data_mitra,id',
             'code_role' => 'required|exists:data_role,code_role',
         ]);
 
@@ -127,6 +131,7 @@ class UserController extends Controller
             'email' => $request->email,
             'no_telp' => $request->no_telp,
             'code_role' => $request->code_role,
+            'data_mitra_id' => $request->data_mitra_id,
             'updated_by' => Auth::id(),
         ];
 

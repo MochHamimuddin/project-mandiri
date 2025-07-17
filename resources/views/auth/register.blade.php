@@ -17,19 +17,19 @@
             --accent-color: #2e59d9;
             --text-color: #5a5c69;
         }
-        
+
         body {
             background: linear-gradient(135deg, var(--secondary-color) 0%, #d2d6de 100%);
             font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
-        
+
         .auth-container {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        
+
         .auth-card {
             border: none;
             border-radius: 1rem;
@@ -37,36 +37,36 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
-        
+
         .auth-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
         }
-        
+
         .auth-header {
             background: var(--primary-color);
             color: white;
             padding: 1.5rem;
             text-align: center;
         }
-        
+
         .auth-body {
             padding: 2rem;
             background: white;
         }
-        
+
         .form-control {
             height: calc(2.5em + 0.75rem + 2px);
             border-radius: 0.35rem;
             padding: 0.375rem 0.75rem;
             border: 1px solid #d1d3e2;
         }
-        
+
         .form-control:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -75,28 +75,28 @@
             letter-spacing: 0.5px;
             transition: all 0.3s;
         }
-        
+
         .btn-primary:hover {
             background-color: var(--accent-color);
             border-color: var(--accent-color);
             transform: translateY(-1px);
         }
-        
+
         .auth-logo {
             max-height: 5rem;
             margin-bottom: 1.5rem;
             transition: all 0.3s;
         }
-        
+
         .auth-logo:hover {
             transform: scale(1.05);
         }
-        
+
         .divider {
             position: relative;
             margin: 1.5rem 0;
         }
-        
+
         .divider:before {
             content: "";
             position: absolute;
@@ -106,7 +106,7 @@
             height: 1px;
             background: linear-gradient(to right, transparent, #d1d3e2, transparent);
         }
-        
+
         .divider-text {
             position: relative;
             padding: 0 1rem;
@@ -115,7 +115,7 @@
             color: var(--text-color);
             font-size: 0.8rem;
         }
-        
+
         .password-toggle {
             position: absolute;
             right: 10px;
@@ -124,12 +124,12 @@
             cursor: pointer;
             color: var(--text-color);
         }
-        
+
         .floating-label {
             position: relative;
             margin-bottom: 1.5rem;
         }
-        
+
         .floating-label label {
             position: absolute;
             top: 0.6rem;
@@ -140,7 +140,7 @@
             background: white;
             padding: 0 0.25rem;
         }
-        
+
         .floating-label input:focus + label,
         .floating-label input:not(:placeholder-shown) + label {
             top: -0.6rem;
@@ -148,64 +148,64 @@
             font-size: 0.75rem;
             color: var(--primary-color);
         }
-        
+
         .password-strength {
             height: 5px;
             margin-top: 5px;
             border-radius: 5px;
             transition: all 0.3s;
         }
-        
+
         .password-strength-weak {
             background-color: #dc3545;
             width: 25%;
         }
-        
+
         .password-strength-medium {
             background-color: #ffc107;
             width: 50%;
         }
-        
+
         .password-strength-strong {
             background-color: #28a745;
             width: 75%;
         }
-        
+
         .password-strength-very-strong {
             background-color: #28a745;
             width: 100%;
         }
-        
+
         .password-requirements {
             font-size: 0.8rem;
             color: #6c757d;
             margin-top: 0.5rem;
         }
-        
+
         .requirement {
             display: flex;
             align-items: center;
             margin-bottom: 0.25rem;
         }
-        
+
         .requirement i {
             margin-right: 0.5rem;
             font-size: 0.7rem;
         }
-        
+
         .requirement.valid {
             color: #28a745;
         }
-        
+
         .requirement.invalid {
             color: #dc3545;
         }
-        
+
         @media (max-width: 768px) {
             .auth-card {
                 margin: 1rem;
             }
-            
+
             .auth-body {
                 padding: 1.5rem;
             }
@@ -222,7 +222,7 @@
                             <div class="col-lg-6 d-none d-lg-block">
                                 <div class="p-5 h-100 d-flex flex-column justify-content-center" style="background: linear-gradient(rgba(78, 115, 223, 0.8), rgba(78, 115, 223, 0.8)), url('https://source.unsplash.com/random/600x800?office') center/cover;">
                                     <div class="text-white text-center">
-                                        <img src="https://seen.asia/file/logocorporate/Logo_CR-U-AA-000446530861be54ae.png" 
+                                        <img src="https://seen.asia/file/logocorporate/Logo_CR-U-AA-000446530861be54ae.png"
                                              class="auth-logo" alt="Company Logo">
                                         <h2 class="mb-3">Join Us Today!</h2>
                                         <p class="mb-0">Create an account to start managing your activity reports.</p>
@@ -236,14 +236,14 @@
                             <div class="col-lg-6">
                                 <div class="auth-body p-5">
                                     <div class="text-center mb-4">
-                                        <img src="https://seen.asia/file/logocorporate/Logo_CR-U-AA-000446530861be54ae.png" 
+                                        <img src="https://seen.asia/file/logocorporate/Logo_CR-U-AA-000446530861be54ae.png"
                                              class="auth-logo d-lg-none" alt="Company Logo" style="max-height: 3rem;">
                                         <h1 class="h4 text-gray-900 mb-4">Create Your Account</h1>
                                     </div>
-                                    
+
                                     <form method="POST" action="{{ route('register') }}" id="registerForm" class="needs-validation" novalidate>
                                         @csrf
-                                        
+
                                         @if($errors->any())
                                         <div class="alert alert-danger animate__animated animate__shakeX">
                                             <ul class="mb-0">
@@ -253,7 +253,7 @@
                                             </ul>
                                         </div>
                                         @endif
-                                        
+
                                         <!-- Full Name -->
                                         <div class="floating-label">
                                             <input type="text" id="nama_lengkap" name="nama_lengkap"
@@ -266,7 +266,7 @@
                                                 Please enter your full name.
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Username -->
                                         <div class="floating-label">
                                             <input type="text" id="username" name="username"
@@ -279,7 +279,7 @@
                                                 Please choose a username.
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Email -->
                                         <div class="floating-label">
                                             <input type="email" id="email" name="email"
@@ -292,7 +292,7 @@
                                                 Please enter a valid email address.
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Phone Number -->
                                         <div class="floating-label">
                                             <input type="tel" id="no_telp" name="no_telp"
@@ -307,7 +307,7 @@
                                                 Please enter a valid phone number starting with 62.
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Password -->
                                         <div class="floating-label position-relative">
                                             <input type="password" id="password" name="password"
@@ -335,7 +335,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Confirm Password -->
                                         <div class="floating-label position-relative">
                                             <input type="password" id="password_confirmation" name="password_confirmation"
@@ -348,7 +348,14 @@
                                                 Passwords must match.
                                             </div>
                                         </div>
-                                        
+
+                                        <select name="data_mitra_id" class="form-control">
+                                            <option value="">Pilih Perusahaan</option>
+                                            @foreach($mitras as $mitra)
+                                                <option value="{{ $mitra->id }}">{{ $mitra->nama_perusahaan }}</option>
+                                            @endforeach
+                                        </select>
+
                                         <div class="form-group d-flex justify-content-between align-items-center mb-4">
                                             <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input" id="terms" required>
@@ -357,7 +364,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        
+
                                         <button type="submit" class="btn btn-primary btn-block btn-icon-split">
                                             <span class="icon">
                                                 <i class="fas fa-user-plus"></i>
@@ -365,7 +372,7 @@
                                             <span class="text" id="registerText">Register</span>
                                             <span id="registerSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                                         </button>
-                                        
+
                                         <div class="text-center small mt-3">
                                             Already have an account? <a href="{{ route('login') }}" class="text-primary">Sign In</a>
                                         </div>
@@ -378,7 +385,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Terms & Conditions Modal -->
     <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -390,16 +397,16 @@
                 <div class="modal-body">
                     <h6>1. Acceptance of Terms</h6>
                     <p>By registering an account, you agree to be bound by these Terms and Conditions.</p>
-                    
+
                     <h6>2. Account Registration</h6>
                     <p>You must provide accurate and complete information when creating an account.</p>
-                    
+
                     <h6>3. User Responsibilities</h6>
                     <p>You are responsible for maintaining the confidentiality of your account credentials.</p>
-                    
+
                     <h6>4. Privacy Policy</h6>
                     <p>Your personal information will be handled in accordance with our Privacy Policy.</p>
-                    
+
                     <h6>5. Termination</h6>
                     <p>We reserve the right to terminate accounts that violate our terms.</p>
                 </div>
@@ -409,10 +416,10 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     @if(session()->has('alert_message'))
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -428,7 +435,7 @@
             });
         </script>
     @endif
-    
+
     <script>
         // Password toggle visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
@@ -442,7 +449,7 @@
                 icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         });
-        
+
         // Confirm Password toggle visibility
         document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
             const password = document.getElementById('password_confirmation');
@@ -455,7 +462,7 @@
                 icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         });
-        
+
         // Password strength checker
         document.getElementById('password').addEventListener('input', function() {
             const password = this.value;
@@ -463,26 +470,26 @@
             const lengthReq = document.getElementById('lengthReq');
             const numberReq = document.getElementById('numberReq');
             const specialReq = document.getElementById('specialReq');
-            
+
             // Reset classes
             strengthBar.className = 'password-strength';
-            
+
             // Check requirements
             const hasLength = password.length >= 8;
             const hasNumber = /\d/.test(password);
             const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-            
+
             // Update requirement indicators
             lengthReq.className = hasLength ? 'requirement valid' : 'requirement invalid';
             numberReq.className = hasNumber ? 'requirement valid' : 'requirement invalid';
             specialReq.className = hasSpecial ? 'requirement valid' : 'requirement invalid';
-            
+
             // Calculate strength
             let strength = 0;
             if (hasLength) strength += 1;
             if (hasNumber) strength += 1;
             if (hasSpecial) strength += 1;
-            
+
             // Update strength bar
             if (password.length === 0) {
                 strengthBar.style.width = '0%';
@@ -503,19 +510,19 @@
                 }
             }
         });
-        
+
         // Confirm password match
         document.getElementById('password_confirmation').addEventListener('input', function() {
             const password = document.getElementById('password').value;
             const confirmPassword = this.value;
-            
+
             if (confirmPassword && password !== confirmPassword) {
                 this.setCustomValidity("Passwords don't match");
             } else {
                 this.setCustomValidity('');
             }
         });
-        
+
         // Form validation
         (function() {
             'use strict';
@@ -526,7 +533,7 @@
                         if (form.checkValidity() === false) {
                             event.preventDefault();
                             event.stopPropagation();
-                            
+
                             // Add shake animation to invalid fields
                             const invalidFields = form.querySelectorAll(':invalid');
                             invalidFields.forEach(field => {
@@ -541,24 +548,24 @@
                 });
             }, false);
         })();
-        
+
         // AJAX form submission
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             // Show loading state
             const registerText = document.getElementById('registerText');
             const registerSpinner = document.getElementById('registerSpinner');
-            
+
             registerText.textContent = 'Registering...';
             registerSpinner.classList.remove('d-none');
-            
+
             // Add shake animation if form is invalid
             if (!this.checkValidity()) {
                 this.classList.add('was-validated');
                 registerText.textContent = 'Register';
                 registerSpinner.classList.add('d-none');
-                
+
                 // Add shake animation to invalid fields
                 const invalidFields = this.querySelectorAll(':invalid');
                 invalidFields.forEach(field => {
@@ -567,10 +574,10 @@
                         field.classList.remove('animate__animated', 'animate__headShake');
                     }, { once: true });
                 });
-                
+
                 return;
             }
-            
+
             // Submit form via AJAX
             fetch(this.action, {
                 method: 'POST',
@@ -609,14 +616,14 @@
                 // Reset loading state
                 registerText.textContent = 'Register';
                 registerSpinner.classList.add('d-none');
-                
+
                 let errorMessage = 'Registration failed. Please try again.';
                 if (error.errors) {
                     errorMessage = Object.values(error.errors).join('\n');
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
-                
+
                 // Show error with animation
                 Swal.fire({
                     title: 'Registration Error',
@@ -640,4 +647,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
