@@ -146,43 +146,57 @@ public function store(Request $request)
 
     // Update Aktivitas
     public function update(Request $request, $id)
-    {
-        $activity = FatigueActivity::findOrFail($id);
+{
+    $activity = FatigueActivity::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:data_users,id',
-            'supervisor_id' => 'required|exists:data_users,id',
-            'description' => 'required|string|max:500',
-        ]);
+    $validator = Validator::make($request->all(), [
+        'user_id' => 'required|exists:data_users,id',
+        'supervisor_id' => 'required|exists:data_users,id',
+        'description' => 'required|string|max:500',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+    ]);
 
-        if ($activity->activity_type === FatigueActivity::TYPE_SIDAK) {
-            $validator->addRules(['location' => 'required|string|max:255']);
-        }
-
-        if ($activity->activity_type === FatigueActivity::TYPE_SAGA) {
-            $validator->addRules(['mitra_id' => 'required|string|max:255']);
-        }
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $activity->update([
-            'user_id' => $request->user_id,
-            'supervisor_id' => $request->supervisor_id,
-            'shift_id' => $request->shift_id,
-            'mitra_id' => $request->mitra_id,
-            'description' => $request->description,
-            'location' => $request->location,
-            'mitra_id' => $request->mitra_id,
-            'updated_by' => auth()->id()
-        ]);
-
-        return redirect()->route('fatigue-activities.show', $activity->id)
-            ->with('success', 'Aktivitas berhasil diperbarui');
+    if ($activity->activity_type === FatigueActivity::TYPE_SIDAK) {
+        $validator->addRules(['location' => 'required|string|max:255']);
     }
+
+    if ($activity->activity_type === FatigueActivity::TYPE_SAGA) {
+        $validator->addRules(['mitra_id' => 'required|string|max:255']);
+    }
+
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    // Update data biasa
+    $activity->fill([
+        'user_id' => $request->user_id,
+        'supervisor_id' => $request->supervisor_id,
+        'shift_id' => $request->shift_id,
+        'mitra_id' => $request->mitra_id,
+        'description' => $request->description,
+        'location' => $request->location,
+        'updated_by' => auth()->id()
+    ]);
+
+    // Tambahkan ini agar nama file tidak berubah kalau tidak upload baru
+    if ($request->hasFile('photo')) {
+        if ($activity->photo_path && Storage::disk('public')->exists($activity->photo_path)) {
+            Storage::disk('public')->delete($activity->photo_path);
+        }
+
+        $photoPath = $request->file('photo')->store('fatigue_activities/photos', 'public');
+        $activity->photo_path = $photoPath;
+    }
+
+    $activity->save();
+
+    return redirect()->route('fatigue-activities.show', $activity->id)
+        ->with('success', 'Aktivitas berhasil diperbarui');
+}
+
 
     // Hapus Aktivitas
     public function destroy($id)

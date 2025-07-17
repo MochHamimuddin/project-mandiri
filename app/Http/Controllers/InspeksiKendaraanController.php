@@ -166,8 +166,8 @@ class InspeksiKendaraanController extends Controller
             'pelaksana_perawatan' => 'required_if:jenis_inspeksi,perawatan|nullable|string|max:100',
             'hasil_observasi_kecepatan' => 'required_if:jenis_inspeksi,evaluasi_kecepatan|nullable|string|max:20',
             'satuan_kecepatan' => 'required_if:jenis_inspeksi,evaluasi_kecepatan|nullable|string|max:20',
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'dokumen' => 'nullable|file|mimes:pdf|max:5120',
+            'foto' => 'required|image|mimes:jpeg,png,jpg|max:10048',
+            'dokumen' => 'nullable|file|mimes:pdf|max:10120',
         ]);
 
         try {
@@ -177,12 +177,12 @@ class InspeksiKendaraanController extends Controller
             }
 
             // Upload photo
-            $fotoPath = $request->file('foto')->store('public/inspeksi/foto');
+            $fotoPath = $request->file('foto')->store('inspeksi/foto');
             $validated['path_foto'] = $fotoPath;
 
             // Upload document if exists
             if ($request->hasFile('dokumen')) {
-                $dokumenPath = $request->file('dokumen')->store('public/inspeksi/dokumen');
+                $dokumenPath = $request->file('dokumen')->store('inspeksi/dokumen');
                 $validated['path_dokumen'] = $dokumenPath;
             }
 
@@ -264,8 +264,8 @@ class InspeksiKendaraanController extends Controller
             'pelaksana_perawatan' => 'required_if:jenis_inspeksi,perawatan|nullable|string|max:100',
             'hasil_observasi_kecepatan' => 'required_if:jenis_inspeksi,evaluasi_kecepatan|nullable|string|max:20',
             'satuan_kecepatan' => 'required_if:jenis_inspeksi,evaluasi_kecepatan|nullable|string|max:20',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'dokumen' => 'nullable|file|mimes:pdf|max:5120',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'dokumen' => 'nullable|file|mimes:pdf|max:10120',
         ]);
 
         try {
@@ -280,7 +280,7 @@ class InspeksiKendaraanController extends Controller
                 Storage::delete($inspeksi->path_foto);
 
                 // Save new photo
-                $fotoPath = $request->file('foto')->store('public/inspeksi/foto');
+                $fotoPath = $request->file('foto')->store('inspeksi/foto');
                 $validated['path_foto'] = $fotoPath;
             }
 
@@ -292,7 +292,7 @@ class InspeksiKendaraanController extends Controller
                 }
 
                 // Save new document
-                $dokumenPath = $request->file('dokumen')->store('public/inspeksi/dokumen');
+                $dokumenPath = $request->file('dokumen')->store('inspeksi/dokumen');
                 $validated['path_dokumen'] = $dokumenPath;
             }
 

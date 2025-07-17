@@ -8,12 +8,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class KeselamatanAreaKerjaController extends Controller
 {
+    // Base storage path
+    private const BASE_STORAGE_PATH = 'keselamatan/';
+
     public function dashboard()
     {
-        // Cek role user
         $user = auth()->user();
 
         $activities = [
@@ -63,7 +67,6 @@ class KeselamatanAreaKerjaController extends Controller
         $title = KeselamatanAreaKerja::getActivityTypes()[$type] ?? 'Aktivitas';
         $user = auth()->user();
 
-        // Query berdasarkan role
         $query = KeselamatanAreaKerja::with(['pengawas', 'mitra'])
             ->where('activity_type', $type);
 
@@ -95,8 +98,8 @@ class KeselamatanAreaKerjaController extends Controller
             'pengawas_id' => 'required|exists:data_users,id',
             'mitra_id' => 'required|exists:data_mitra,id',
             'deskripsi' => 'required|string|max:255',
-            'path_foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'path_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+            'path_foto' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'path_file' => 'nullable|file|mimes:pdf,doc,docx|max:10120',
         ]);
 
         if ($validator->fails()) {
@@ -113,13 +116,19 @@ class KeselamatanAreaKerjaController extends Controller
             $data['updated_by'] = auth()->id();
 
             if ($request->hasFile('path_foto')) {
-                $data['path_foto'] = $request->file('path_foto')->store('public/keselamatan/foto');
-                $data['path_foto'] = str_replace('public/', '', $data['path_foto']);
+                $filename = $this->generateFilename($request->file('path_foto'), 'foto');
+                $data['path_foto'] = $request->file('path_foto')->storeAs(
+                    self::BASE_STORAGE_PATH . 'foto',
+                    $filename
+                );
             }
 
             if ($request->hasFile('path_file')) {
-                $data['path_file'] = $request->file('path_file')->store('public/keselamatan/dokumen');
-                $data['path_file'] = str_replace('public/', '', $data['path_file']);
+                $filename = $this->generateFilename($request->file('path_file'), 'dokumen');
+                $data['path_file'] = $request->file('path_file')->storeAs(
+                    self::BASE_STORAGE_PATH . 'dokumen',
+                    $filename
+                );
             }
 
             KeselamatanAreaKerja::create($data);
@@ -149,7 +158,6 @@ class KeselamatanAreaKerjaController extends Controller
         $activity = KeselamatanAreaKerja::findOrFail($id);
         $user = auth()->user();
 
-        // Cek otorisasi
         if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
             abort(403, 'Unauthorized action.');
         }
@@ -165,7 +173,6 @@ class KeselamatanAreaKerjaController extends Controller
         $activity = KeselamatanAreaKerja::findOrFail($id);
         $user = auth()->user();
 
-        // Cek otorisasi
         if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
             abort(403, 'Unauthorized action.');
         }
@@ -174,8 +181,8 @@ class KeselamatanAreaKerjaController extends Controller
             'pengawas_id' => 'required|exists:data_users,id',
             'mitra_id' => 'required|exists:data_mitra,id',
             'deskripsi' => 'required|string|max:255',
-            'path_foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'path_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
+            'path_foto' => 'nullable|image|mimes:jpeg,png,jpg|max:10048',
+            'path_file' => 'nullable|file|mimes:pdf,doc,docx|max:10120',
             'is_approved' => 'sometimes|boolean'
         ]);
 
@@ -193,14 +200,22 @@ class KeselamatanAreaKerjaController extends Controller
                 if ($activity->path_foto) {
                     Storage::delete($activity->path_foto);
                 }
-                $data['path_foto'] = $request->file('path_foto')->store('keselamatan/foto');
+                $filename = $this->generateFilename($request->file('path_foto'), 'foto');
+                $data['path_foto'] = $request->file('path_foto')->storeAs(
+                    self::BASE_STORAGE_PATH . 'foto',
+                    $filename
+                );
             }
 
             if ($request->hasFile('path_file')) {
                 if ($activity->path_file) {
                     Storage::delete($activity->path_file);
                 }
-                $data['path_file'] = $request->file('path_file')->store('keselamatan/dokumen');
+                $filename = $this->generateFilename($request->file('path_file'), 'dokumen');
+                $data['path_file'] = $request->file('path_file')->storeAs(
+                    self::BASE_STORAGE_PATH . 'dokumen',
+                    $filename
+                );
             }
 
             $activity->update($data);
@@ -220,7 +235,6 @@ class KeselamatanAreaKerjaController extends Controller
         $activity = KeselamatanAreaKerja::findOrFail($id);
         $user = auth()->user();
 
-        // Cek otorisasi
         if ($user->code_role !== '001' && $activity->created_by !== $user->id) {
             abort(403, 'Unauthorized action.');
         }
@@ -258,7 +272,6 @@ class KeselamatanAreaKerjaController extends Controller
         $activityType = $typeMapping[$type] ?? $type;
         $title = 'Laporan ' . (KeselamatanAreaKerja::getActivityTypes()[$activityType] ?? 'Aktivitas');
 
-        // Query berdasarkan role
         $query = KeselamatanAreaKerja::with(['pengawas', 'mitra'])
             ->where('activity_type', $activityType);
 
@@ -276,7 +289,6 @@ class KeselamatanAreaKerjaController extends Controller
         $activity = KeselamatanAreaKerja::findOrFail($id);
         $user = auth()->user();
 
-        // Hanya admin yang bisa mengubah status approval
         if ($user->code_role !== '001') {
             return response()->json([
                 'success' => false,
@@ -301,5 +313,17 @@ class KeselamatanAreaKerjaController extends Controller
                 'message' => 'Gagal mengubah status persetujuan'
             ], 500);
         }
+    }
+
+    /**
+     * Generate unique filename with timestamp
+     */
+    private function generateFilename($file, $prefix)
+    {
+        $timestamp = Carbon::now()->format('Ymd_His');
+        $extension = $file->getClientOriginalExtension();
+        $randomString = Str::random(10);
+        
+        return sprintf('%s_%s_%s.%s', $prefix, $timestamp, $randomString, $extension);
     }
 }

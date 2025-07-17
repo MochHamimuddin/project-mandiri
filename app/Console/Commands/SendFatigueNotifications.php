@@ -62,9 +62,9 @@ class SendFatigueNotifications extends Command
         $cacheKey = "fatigue_notif_{$user->id}_{$activityType}_{$today}";
 
         // 4. Skip jika sudah pernah dikirim hari ini
-        if (cache()->has($cacheKey)) {
-            return;
-        }
+        // if (cache()->has($cacheKey)) {
+        //     return;
+        // }
 
         $activityName = FatigueActivity::$typeLabels[$activityType] ?? $activityType;
         $message = $this->formatMessage($activityName, $deadlineTime);

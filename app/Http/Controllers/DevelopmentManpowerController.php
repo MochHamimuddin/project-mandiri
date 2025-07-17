@@ -119,30 +119,53 @@ public function update(Request $request, DevelopmentManpower $developmentManpowe
     ]);
 
     try {
-        // Handle file uploads
+        // Handle foto_aktivitas
         if ($request->hasFile('foto_aktivitas')) {
-            // Hapus file lama jika ada
+            // Hapus file lama
             if ($developmentManpower->foto_aktivitas) {
-                Storage::delete('public/'.$developmentManpower->foto_aktivitas);
+                Storage::disk('public')->delete($developmentManpower->foto_aktivitas);
             }
-            // Simpan file baru
-            $validatedData['foto_aktivitas'] = $request->file('foto_aktivitas')->store('development_manpower', 'public');
+
+            $originalName = $request->file('foto_aktivitas')->getClientOriginalName();
+            $ext = $request->file('foto_aktivitas')->getClientOriginalExtension();
+            $filename = time().'_foto_'.pathinfo($originalName, PATHINFO_FILENAME).'.'.$ext;
+
+            $validatedData['foto_aktivitas'] = $request->file('foto_aktivitas')->storeAs(
+                'development_manpower', $filename, 'public'
+            );
         }
 
+        // Handle dokumen_1
         if ($request->hasFile('dokumen_1')) {
             if ($developmentManpower->dokumen_1) {
-                Storage::delete('public/'.$developmentManpower->dokumen_1);
+                Storage::disk('public')->delete($developmentManpower->dokumen_1);
             }
-            $validatedData['dokumen_1'] = $request->file('dokumen_1')->store('development_manpower', 'public');
+
+            $originalName = $request->file('dokumen_1')->getClientOriginalName();
+            $ext = $request->file('dokumen_1')->getClientOriginalExtension();
+            $filename = time().'_dok1_'.pathinfo($originalName, PATHINFO_FILENAME).'.'.$ext;
+
+            $validatedData['dokumen_1'] = $request->file('dokumen_1')->storeAs(
+                'development_manpower', $filename, 'public'
+            );
         }
 
+        // Handle dokumen_2
         if ($request->hasFile('dokumen_2')) {
             if ($developmentManpower->dokumen_2) {
-                Storage::delete('public/'.$developmentManpower->dokumen_2);
+                Storage::disk('public')->delete($developmentManpower->dokumen_2);
             }
-            $validatedData['dokumen_2'] = $request->file('dokumen_2')->store('development_manpower', 'public');
+
+            $originalName = $request->file('dokumen_2')->getClientOriginalName();
+            $ext = $request->file('dokumen_2')->getClientOriginalExtension();
+            $filename = time().'_dok2_'.pathinfo($originalName, PATHINFO_FILENAME).'.'.$ext;
+
+            $validatedData['dokumen_2'] = $request->file('dokumen_2')->storeAs(
+                'development_manpower', $filename, 'public'
+            );
         }
 
+        // Update model
         $developmentManpower->update($validatedData);
 
         return redirect()->route('development-manpower.index')
@@ -153,6 +176,7 @@ public function update(Request $request, DevelopmentManpower $developmentManpowe
             ->with('error', 'Gagal memperbarui data: '.$e->getMessage());
     }
 }
+
 
 private function validateRequest(Request $request, $model = null)
 {

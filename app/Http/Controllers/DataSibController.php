@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class DataSibController extends Controller
 {
     // Define the base storage path
-    private const BASE_STORAGE_PATH = 'public/sib_files/';
+    private const BASE_STORAGE_PATH = 'sib_files/';
 
     /**
      * Display a listing of the resource.

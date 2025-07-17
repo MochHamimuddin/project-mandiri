@@ -12,7 +12,6 @@ class FatigueActivity extends Model
 {
     use SoftDeletes;
 
-    // Activity Type Constants
     const TYPE_FTW = 'ftw';
     const TYPE_DFIT = 'dfit';
     const TYPE_FATIGUE_CHECK = 'fatigue_check';
@@ -38,9 +37,8 @@ class FatigueActivity extends Model
         self::TYPE_SIDAK
     ];
 
-    // Activity Deadlines (WIB Time) - daily fixed time
     public static $dailyDeadlines = [
-        self::TYPE_FTW => '04:52',
+        self::TYPE_FTW => '04:12',
         self::TYPE_DFIT => '04:54',
         self::TYPE_FATIGUE_CHECK => '04:57',
         self::TYPE_WAKEUP_CALL => '04:58',
@@ -75,17 +73,15 @@ class FatigueActivity extends Model
 
     public function shouldSendNotification(): bool
     {
-        // Skip jika sudah upload
+
         if ($this->is_uploaded) {
             return false;
         }
 
-        // Skip jika user tidak ada nomor WA
         if (empty($this->user->no_telp)) {
             return false;
         }
 
-        // Skip jika user sudah memiliki data aktivitas yang lengkap hari ini
         if ($this->userHasCompleteActivityToday()) {
             return false;
         }
@@ -93,19 +89,15 @@ class FatigueActivity extends Model
         $now = now('Asia/Jakarta');
         $todayDeadline = $this->getTodayDeadline();
 
-        // Hanya kirim jika sekarang sudah lewat deadline hari ini
         if ($now->lessThan($todayDeadline)) {
             return false;
         }
 
-        // Cek apakah sudah pernah dikirim hari ini
         $cacheKey = $this->getNotificationCacheKey();
         return !Cache::has($cacheKey);
     }
 
-    /**
-     * Check if user already has complete activity data for today
-     */
+
     protected function userHasCompleteActivityToday(): bool
     {
         return static::where('user_id', $this->user_id)
@@ -115,9 +107,6 @@ class FatigueActivity extends Model
             ->exists();
     }
 
-    /**
-     * Get cache key for notification tracking
-     */
     protected function getNotificationCacheKey(): string
     {
         return sprintf('fatigue_notif_%s_%s_%s',
@@ -157,9 +146,6 @@ class FatigueActivity extends Model
         );
     }
 
-    /**
-     * Get today's deadline (daily fixed time)
-     */
     protected function getTodayDeadline(): Carbon
     {
         $deadlineTime = self::$dailyDeadlines[$this->activity_type] ?? '23:59';
