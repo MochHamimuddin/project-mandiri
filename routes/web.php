@@ -241,7 +241,7 @@ Route::get('/test-fonnte', function() {
     }
 
     // Test parameters
-    $testPhone = '6281234567890'; // Replace with your test number
+    $testPhone = '6281233838624'; // Replace with your test number
     $testMessage = 'Test message from Laravel at ' . now()->format('Y-m-d H:i:s');
 
     try {

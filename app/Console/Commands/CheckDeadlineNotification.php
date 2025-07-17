@@ -11,11 +11,16 @@ use App\Events\DeadlineCheckUpdate;
 
 class CheckDeadlineNotification extends Command
 {
-    protected $signature = 'check:deadline';
+    // protected $signature = 'check:deadline';
+
+    protected $signature = 'check:deadline {type : fire|fatigue|lingkungan|kesehatan}';
     protected $description = 'Check deadline and send WhatsApp notifications with real-time updates';
 
     public function handle()
     {
+        $type = $this->argument('type');
+
+        if ($type === 'fatigue' || $type === 'fire' || $type === 'lingkungan' || $type === 'kesehatan'){
         // Broadcast start event
         event(new DeadlineCheckUpdate(
             'Memulai pengecekan deadline',
@@ -124,4 +129,6 @@ class CheckDeadlineNotification extends Command
         $this->info($summary);
         Log::info($summary);
     }
-}
+
+        }
+    }

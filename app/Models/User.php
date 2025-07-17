@@ -67,6 +67,26 @@ class User extends Authenticatable
 {
     return $this->hasMany(FatigueActivity::class);
 }
+
+public function firePreventive()
+{
+    return $this->hasMany(FirePreventiveManagement::class, 'supervisor_id');
+}
+
+public function programKesehatan()
+{
+    return $this->hasMany(ProgramKerjaKesehatan::class, 'pengawas_id');
+}
+
+public function programLingkungan()
+{
+    return $this->hasMany(programLingkunganHidup::class, 'pelaksana');
+}
+
+public function developmentManpower()
+{
+    return $this->hasMany(developmentManpower::class, 'pengawas_id');
+}
 }
 
 
