@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MitraController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DataSibController;
 use App\Http\Controllers\FirePreventiveController;
 use App\Http\Controllers\FatigueActivityController;
@@ -217,6 +218,9 @@ Route::prefix('data-sib')->name('data-sib.')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/users/trashed', [UserController::class, 'trashed'])->name('users.trashed');
     Route::post('/users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('/reports/export', [ReportController::class, 'exportBisnis'])->name('reports.bisnis.export');
 });
 Route::get('/', function () {
     return redirect()->route('login');
