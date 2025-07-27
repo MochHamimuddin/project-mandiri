@@ -39,6 +39,7 @@ class ProgramKerjaKesehatan extends Model
 
     protected $casts = [
         'tanggal_upload' => 'datetime',
+        'created_by' => 'integer'
     ];
 
     protected $appends = [
@@ -168,12 +169,14 @@ class ProgramKerjaKesehatan extends Model
     // ==================== RELATIONSHIPS ====================
     public function pengawas()
     {
-        return $this->belongsTo(User::class, 'pengawas_id');
+        return $this->belongsTo(User::class, 'pengawas_id','id');
     }
 
+
+    
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function updater()

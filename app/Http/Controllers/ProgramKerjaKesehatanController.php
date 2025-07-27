@@ -56,6 +56,8 @@ class ProgramKerjaKesehatanController extends Controller
         $user = Auth::user();
         $query = ProgramKerjaKesehatan::query()->with(['pengawas', 'creator']);
 
+        \Log::debug('data di controller', ['query kesehatan in controler' => $query]);
+
         // Filter by user role
         if ($user->code_role != '001') {
             $query->where('pengawas_id', $user->id);
@@ -68,10 +70,13 @@ class ProgramKerjaKesehatanController extends Controller
 
         $programs = $query->latest()->paginate(10);
 
+
+
         return view('program-kesehatan.index', [
             'programs' => $programs,
             'jenisProgram' => ProgramKerjaKesehatan::getJenisProgramOptions()
         ]);
+
     }
 
 
