@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="row g-4">
       @php
         $programs = [
@@ -79,7 +79,7 @@
             'activities' => 11
           ],
         ];
-        
+
         // Define explicit colors for the chart
         $chartColors = [
           'primary' => '#4e73df',
@@ -114,7 +114,7 @@
         </div>
       @endforeach
     </div>
-    
+
     <!-- Statistics Section -->
     <div class="row mt-5">
       <!-- Pie Chart -->
@@ -128,7 +128,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Program Activities Table -->
       <div class="col-lg-6">
         <div class="card shadow-sm">
@@ -154,11 +154,11 @@
                     <td class="text-end">{{ $program['activities'] }}</td>
                     <td class="text-end">
                       <div class="progress" style="height: 20px;">
-                        <div class="progress-bar bg-{{ $program['color'] }}" 
-                             role="progressbar" 
-                             style="width: {{ $program['completion'] }}%" 
-                             aria-valuenow="{{ $program['completion'] }}" 
-                             aria-valuemin="0" 
+                        <div class="progress-bar bg-{{ $program['color'] }}"
+                             role="progressbar"
+                             style="width: {{ $program['completion'] }}%"
+                             aria-valuenow="{{ $program['completion'] }}"
+                             aria-valuemin="0"
                              aria-valuemax="100">
                           {{ $program['completion'] }}%
                         </div>
@@ -192,7 +192,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Quick Stats Section -->
     <div class="row mt-4">
       <div class="col-12">
@@ -242,73 +242,73 @@
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
   }
-  
+
   .program-card {
     transition: all 0.3s ease;
     border: 1px solid rgba(0,0,0,0.05);
     overflow: hidden;
   }
-  
+
   .program-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
     border-color: rgba(var(--bs-primary-rgb), 0.2);
   }
-  
+
   .program-card .card-icon {
     font-size: 2.5rem;
     margin-bottom: 1.25rem;
     transition: transform 0.3s;
   }
-  
+
   .program-card:hover .card-icon {
     transform: scale(1.1);
   }
-  
+
   .program-card .card-title {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--bs-dark);
     transition: color 0.3s;
   }
-  
+
   .program-card:hover .card-title {
     color: var(--bs-primary);
   }
-  
+
   .program-card .btn {
     transition: all 0.3s;
     font-weight: 500;
     letter-spacing: 0.5px;
   }
-  
+
   .stat-card {
     transition: all 0.3s;
   }
-  
+
   .stat-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
   }
-  
+
   .stat-card h3 {
     font-weight: 700;
   }
-  
+
   .table-hover tbody tr {
     transition: all 0.2s;
   }
-  
+
   .table-hover tbody tr:hover {
     background-color: rgba(var(--bs-primary-rgb), 0.05);
     transform: translateX(2px);
   }
-  
+
   .progress {
     border-radius: 10px;
     background-color: #f0f0f0;
   }
-  
+
   .progress-bar {
     border-radius: 10px;
     font-size: 0.75rem;
@@ -316,16 +316,16 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   @media (max-width: 768px) {
     .banner-overlay {
       padding: 1rem !important;
     }
-    
+
     .banner-overlay h2 {
       font-size: 1.5rem;
     }
-    
+
     .program-card .card-icon {
       font-size: 2rem;
     }
@@ -346,11 +346,11 @@
         }
       });
     }, { threshold: 0.1 });
-    
+
     document.querySelectorAll('.program-card').forEach(card => {
       observer.observe(card);
     });
-    
+
     // Pie Chart
     const ctx = document.getElementById('completionChart').getContext('2d');
     const completionChart = new Chart(ctx, {

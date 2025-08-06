@@ -40,7 +40,8 @@
                 $sibRoutes = [
                     'data-sib.create',
                     'data-sib.edit',
-                    'data-sib.show'
+                    'data-sib.show',
+                    'prosedur-sib'
                 ];
 
                 // Check current page type
@@ -61,9 +62,9 @@
             {{-- Show SIB menu only when not on report page --}}
             @unless($isReportPage)
                 <li class="nav-item">
-                    <a class="nav-link @if($isSibPage) active @else collapsed @endif" href="{{ route('data-sib.create') }}">
+                    <a class="nav-link @if($isSibPage) active @else collapsed @endif" href="{{ route('prosedur-sib') }}">
                         <i class="bi bi-plus-circle"></i>
-                        <span>Buat SIB Baru</span>
+                        <span>Pengajuan SIB HRA</span>
                     </a>
                 </li>
             @endunless

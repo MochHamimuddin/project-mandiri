@@ -77,9 +77,9 @@
             </div>
             @endif
 
-            @if(!request()->is('data-sib/create*') && auth()->user()->code_role === '002')
+            @if(!request()->is('prosedur*') && auth()->user()->code_role === '002')
             <div class="col-lg-5 col-md-6">
-                <a href="{{ route('data-sib.create') }}" class="text-decoration-none">
+                <a href="{{ route('prosedur-sib') }}" class="text-decoration-none">
                     <div class="card card-hover h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-4">
