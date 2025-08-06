@@ -26,6 +26,10 @@ Route::middleware(['auth', 'inactivity'])->group(function () {
         return view('layout.home');
     })->name('dashboard');
 
+    Route::get('/beranda', function () {
+    return view('layout.beranda');
+    })->name('beranda');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Mitra Routes

@@ -143,7 +143,7 @@
                             <div class="mb-3">
                                 <label for="tanggal_akhir" class="form-label">Tanggal Akhir <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control @error('tanggal_akhir') is-invalid @enderror"
-                                       id="tanggal_akhir" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" required>
+                                    id="tanggal_akhir" name="tanggal_akhir" value="{{ old('tanggal_akhir') }}" readonly>
                                 @error('tanggal_akhir')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -275,7 +275,57 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="card mb-3">
+                                        <div class="card-header bg-light">
+                                            <h6 class="mb-0">Formulir Wajib</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label for="form_fpp" class="form-label">Form FPP <span class="text-danger">*</span></label>
+                                                <input type="file" class="form-control @error('form_fpp') is-invalid @enderror"
+                                                       id="form_fpp" name="form_fpp" accept=".pdf" required>
+                                                @error('form_fpp')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                                <small class="text-muted">Disimpan di: forms/</small>
+                                            </div>
 
+                                            <div class="mb-3">
+                                                <label for="form_observasi_berjenjang" class="form-label">Form Observasi Berjenjang <span class="text-danger">*</span></label>
+                                                <input type="file" class="form-control @error('form_observasi_berjenjang') is-invalid @enderror"
+                                                       id="form_observasi_berjenjang" name="form_observasi_berjenjang" accept=".pdf" required>
+                                                @error('form_observasi_berjenjang')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                                <small class="text-muted">Disimpan di: forms/</small>
+                                            </div>
+                                            <div class="mb-3" id="form_p2h_container">
+                                                <label for="form_p2h_unit_lifting" class="form-label">Form P2H Unit Lifting</label>
+                                                <input type="file" class="form-control @error('form_p2h_unit_lifting') is-invalid @enderror"
+                                                       id="form_p2h_unit_lifting" name="form_p2h_unit_lifting" accept=".pdf">
+                                                @error('form_p2h_unit_lifting')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                                <small class="text-muted">Disimpan di: forms/</small>
+                                            </div>
+
+                                            <div class="mb-3" id="form_inspeksi_container">
+                                                <label for="form_inspeksi_tools" class="form-label">Form Inspeksi Tools</label>
+                                                <input type="file" class="form-control @error('form_inspeksi_tools') is-invalid @enderror"
+                                                       id="form_inspeksi_tools" name="form_inspeksi_tools" accept=".pdf">
+                                                @error('form_inspeksi_tools')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                                <small class="text-muted">Disimpan di: forms/</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="card mb-3">
                                         <div class="card-header bg-light">
@@ -320,66 +370,6 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                                 <small class="text-muted">Disimpan di: work_permits/</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card mb-3">
-                                        <div class="card-header bg-light">
-                                            <h6 class="mb-0">Formulir Wajib</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label for="form_fpp" class="form-label">Form FPP <span class="text-danger">*</span></label>
-                                                <input type="file" class="form-control @error('form_fpp') is-invalid @enderror"
-                                                       id="form_fpp" name="form_fpp" accept=".pdf" required>
-                                                @error('form_fpp')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                                <small class="text-muted">Disimpan di: forms/</small>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="form_observasi_berjenjang" class="form-label">Form Observasi Berjenjang <span class="text-danger">*</span></label>
-                                                <input type="file" class="form-control @error('form_observasi_berjenjang') is-invalid @enderror"
-                                                       id="form_observasi_berjenjang" name="form_observasi_berjenjang" accept=".pdf" required>
-                                                @error('form_observasi_berjenjang')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                                <small class="text-muted">Disimpan di: forms/</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="card mb-3">
-                                        <div class="card-header bg-light">
-                                            <h6 class="mb-0">Formulir Khusus</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="mb-3" id="form_p2h_container">
-                                                <label for="form_p2h_unit_lifting" class="form-label">Form P2H Unit Lifting</label>
-                                                <input type="file" class="form-control @error('form_p2h_unit_lifting') is-invalid @enderror"
-                                                       id="form_p2h_unit_lifting" name="form_p2h_unit_lifting" accept=".pdf">
-                                                @error('form_p2h_unit_lifting')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                                <small class="text-muted">Disimpan di: forms/</small>
-                                            </div>
-
-                                            <div class="mb-3" id="form_inspeksi_container">
-                                                <label for="form_inspeksi_tools" class="form-label">Form Inspeksi Tools</label>
-                                                <input type="file" class="form-control @error('form_inspeksi_tools') is-invalid @enderror"
-                                                       id="form_inspeksi_tools" name="form_inspeksi_tools" accept=".pdf">
-                                                @error('form_inspeksi_tools')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                                <small class="text-muted">Disimpan di: forms/</small>
                                             </div>
                                         </div>
                                     </div>
@@ -546,7 +536,7 @@
                     if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
                         const errorDiv = document.createElement('div');
                         errorDiv.className = 'invalid-feedback';
-                        errorDiv.textContent = 'Field ini wajib diisi';
+                        errorDiv.textContent = 'Column ini wajib diisi';
                         field.parentNode.insertBefore(errorDiv, field.nextSibling);
                     }
                 }
@@ -585,67 +575,77 @@
 
         // Job type specific fields
         const jenisPekerjaanSelect = document.getElementById('jenis_pekerjaan');
-        const stagglingPlanContainer = document.getElementById('staggling_plan_container');
-        const kajianGeotekContainer = document.getElementById('kajian_geotek_container');
-        const p2hContainer = document.getElementById('form_p2h_container');
-        const inspeksiContainer = document.getElementById('form_inspeksi_container');
+        const stagglingPlanInput = document.getElementById('staggling_plan');
+        const kajianGeotekInput = document.getElementById('kajian_geotek');
+        const formP2HInput = document.getElementById('form_p2h_unit_lifting');
+        const formInspeksiInput = document.getElementById('form_inspeksi_tools');
 
-        // Jobs that don't require staggling plan
-        const noStagglingPlanJobs = [
-            'Bekerja di Ketinggian >1.8 meter',
-            'Bekerja di Dekat Air',
-            'Bekerja Kelistrikan >380 V',
-            'Pelepasan dan Pemasangan Tyre OHT di Jalan Tambang',
-            'Maintenance Conveyor',
-            'Penggalian/Gangguan di Sekitar Bangunan'
+        // Jobs that require staggling plan
+        const stagglingPlanRequiredJobs = [
+            'Dumping & Loading HRA',
+            'Aktifitas Peledakan',
+            'Pengangkatan/Lifting',
+            'Bekerja di Ruang Terbatas',
+            'Bekerja di Dekat/Bawah Tebing Rawan Longsor FK<1.3',
+            'Aktifitas Land Clearing',
+            'Aktifitas Pengelasan Bahan Mudah Terbakar'
         ];
 
         // Jobs that require geotechnical study
         const geotekRequiredJobs = [
             'Dumping & Loading HRA',
             'Bekerja di Dekat/Bawah Tebing Rawan Longsor FK<1.3',
-            'Pelepasan dan Pemasangan Tyre OHT di Jalan Tambang',
             'Aktifitas Land Clearing',
+            'Pelepasan dan Pemasangan Tyre OHT di Jalan Tambang',
             'Aktifitas Pengelasan Bahan Mudah Terbakar'
         ];
 
-        // Lifting job
+        // Lifting job type
         const liftingJob = 'Pengangkatan/Lifting';
 
         function toggleFieldRequirements() {
-            const selectedJob = jenisPekerjaanSelect.value;
+        const selectedJob = jenisPekerjaanSelect.value;
+        const stagglingPlanContainer = document.getElementById('staggling_plan_container');
+        const kajianGeotekContainer = document.getElementById('kajian_geotek_container');
 
-            // Staggling plan
-            if (noStagglingPlanJobs.includes(selectedJob)) {
-                stagglingPlanContainer.style.display = 'none';
-                document.getElementById('staggling_plan').required = false;
-            } else {
-                stagglingPlanContainer.style.display = 'block';
-                document.getElementById('staggling_plan').required = true;
-            }
-
-            // Geotechnical study
-            if (geotekRequiredJobs.includes(selectedJob)) {
-                kajianGeotekContainer.style.display = 'block';
-                document.getElementById('kajian_geotek').required = true;
-            } else {
-                kajianGeotekContainer.style.display = 'none';
-                document.getElementById('kajian_geotek').required = false;
-            }
-
-            // Lifting forms
-            if (selectedJob === liftingJob) {
-                p2hContainer.style.display = 'block';
-                inspeksiContainer.style.display = 'block';
-                document.getElementById('form_p2h_unit_lifting').required = true;
-                document.getElementById('form_inspeksi_tools').required = true;
-            } else {
-                p2hContainer.style.display = 'none';
-                inspeksiContainer.style.display = 'none';
-                document.getElementById('form_p2h_unit_lifting').required = false;
-                document.getElementById('form_inspeksi_tools').required = false;
-            }
+        // Staggling plan - only required for specific jobs
+        if (stagglingPlanRequiredJobs.includes(selectedJob)) {
+            stagglingPlanInput.required = true;
+            stagglingPlanContainer.style.display = 'block';
+        } else {
+            stagglingPlanInput.required = false;
+            stagglingPlanContainer.style.display = 'none';
         }
+
+        // Geotechnical study
+        if (geotekRequiredJobs.includes(selectedJob)) {
+            kajianGeotekInput.required = true;
+            kajianGeotekContainer.style.display = 'block';
+        } else {
+            kajianGeotekInput.required = false;
+            kajianGeotekContainer.style.display = 'none';
+        }
+
+        // Lifting forms
+        if (selectedJob === liftingJob) {
+            formP2HInput.required = true;
+            formInspeksiInput.required = true;
+        } else {
+            formP2HInput.required = false;
+            formInspeksiInput.required = false;
+        }
+    }
+
+    document.getElementById('tanggal_mulai').addEventListener('change', function() {
+            if (this.value) {
+                const startDate = new Date(this.value);
+                startDate.setDate(startDate.getDate() + 7); // Tambah 7 hari
+
+                // Format tanggal ke YYYY-MM-DD
+                const endDate = startDate.toISOString().split('T')[0];
+                document.getElementById('tanggal_akhir').value = endDate;
+            }
+        });
 
         // Initial setup
         toggleFieldRequirements();
