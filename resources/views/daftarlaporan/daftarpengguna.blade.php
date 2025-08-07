@@ -145,13 +145,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($programs as $program)
+                  @foreach($reportData as $program)
                   <tr>
                     <td>
                       <i class="bi {{ $program['icon'] }} text-{{ $program['color'] }} me-2"></i>
                       {{ $program['name'] }}
                     </td>
-                    <td class="text-end">{{ $program['activities'] }}</td>
+                    <td class="text-end">{{ $program['total'] }}</td>
                     <td class="text-end">
                       <div class="progress" style="height: 20px;">
                         <div class="progress-bar bg-{{ $program['color'] }}"
@@ -179,12 +179,14 @@
                   @endforeach
                 </tbody>
                 <tfoot>
+                @foreach($summary as $program)
                   <tr class="table-light">
                     <th>Total</th>
-                    <th class="text-end">{{ array_sum(array_column($programs, 'activities')) }}</th>
-                    <th class="text-end">{{ round(array_sum(array_column($programs, 'completion'))/count($programs), 1) }}%</th>
+                    <th class="text-end">{{ $program['total_all'] }}</th>
+                    <th class="text-end">{{ $program['average'] }}%</th>
                     <th class="text-end">Average</th>
                   </tr>
+                @endforeach
                 </tfoot>
               </table>
             </div>
@@ -194,6 +196,7 @@
     </div>
 
     <!-- Quick Stats Section -->
+    @foreach($summary as $program)
     <div class="row mt-4">
       <div class="col-12">
         <div class="card shadow-sm">
@@ -202,25 +205,25 @@
             <div class="row text-center">
               <div class="col-md-3 mb-3 mb-md-0">
                 <div class="stat-card bg-primary bg-opacity-10 p-3 rounded">
-                  <h3 class="text-primary mb-1">{{ count($programs) }}</h3>
+                  <h3 class="text-primary mb-1">{{ $program['total_program'] }}</h3>
                   <p class="mb-0 text-muted">Total Programs</p>
                 </div>
               </div>
               <div class="col-md-3 mb-3 mb-md-0">
                 <div class="stat-card bg-success bg-opacity-10 p-3 rounded">
-                  <h3 class="text-success mb-1">{{ array_sum(array_column($programs, 'activities')) }}</h3>
+                  <h3 class="text-success mb-1">{{ $program['total_all'] }}</h3>
                   <p class="mb-0 text-muted">Total Activities</p>
                 </div>
               </div>
               <div class="col-md-3 mb-3 mb-md-0">
                 <div class="stat-card bg-warning bg-opacity-10 p-3 rounded">
-                  <h3 class="text-warning mb-1">5</h3>
+                  <h3 class="text-warning mb-1">{{ $program['missing'] }}</h3>
                   <p class="mb-0 text-muted">Pending Actions</p>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="stat-card bg-info bg-opacity-10 p-3 rounded">
-                  <h3 class="text-info mb-1">{{ round(array_sum(array_column($programs, 'completion'))/count($programs), 1) }}%</h3>
+                  <h3 class="text-info mb-1">{{ $program['average'] }}%</h3>
                   <p class="mb-0 text-muted">Avg Completion</p>
                 </div>
               </div>
@@ -229,6 +232,7 @@
         </div>
       </div>
     </div>
+    @endforeach
   </div>
 </section>
 
@@ -357,18 +361,18 @@
       type: 'pie',
       data: {
         labels: [
-          @foreach($programs as $program)
+          @foreach($reportData as $program)
             '{{ $program['name'] }}',
           @endforeach
         ],
         datasets: [{
           data: [
-            @foreach($programs as $program)
+            @foreach($reportData as $program)
               {{ $program['completion'] }},
             @endforeach
           ],
           backgroundColor: [
-            @foreach($programs as $program)
+            @foreach($reportData as $program)
               '{{ $chartColors[$program['color']] }}',
             @endforeach
           ],

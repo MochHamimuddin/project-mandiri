@@ -14,6 +14,7 @@ use App\Http\Controllers\KeselamatanAreaKerjaController;
 use App\Http\Controllers\ProgramKerjaKesehatanController;
 use App\Http\Controllers\ProgramLingkunganHidupController;
 use App\Http\Controllers\ListDokumenController;
+use App\Http\Controllers\DaftarLaporanController;
 
 
 Route::middleware(['inactivity', 'guest'])->group(function () {
@@ -141,9 +142,12 @@ Route::middleware(['auth', 'inactivity'])->group(function () {
 
 
     // Daftar Laporan
-    Route::get('/daftar-laporan', function () {
-        return view('daftarlaporan.daftarpengguna');
-    })->name('daftar-laporan');
+    // Route::get('/daftar-laporan', function () {
+    //     return view('daftarlaporan.daftarpengguna');
+    // })->name('daftar-laporan');
+
+
+        Route::get('/daftar-laporan',  [DaftarLaporanController::class, 'index'])->name('daftar-laporan');
 
     Route::prefix('inspeksi')->group(function () {
         // Dashboard khusus inspeksi
