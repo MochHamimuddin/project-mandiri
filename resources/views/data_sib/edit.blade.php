@@ -503,20 +503,22 @@
         const inspeksiContainer = document.getElementById('form_inspeksi_container');
 
         // Define job types with special requirements
-        const noStagglingPlanJobs = [
-            'Bekerja di Ketinggian >1.8 meter',
-            'Bekerja di Dekat Air',
-            'Bekerja Kelistrikan >380 V',
-            'Pelepasan dan Pemasangan Tyre OHT di Jalan Tambang',
-            'Maintenance Conveyor',
-            'Penggalian/Gangguan di Sekitar Bangunan'
+        const stagglingPlanRequiredJobs = [
+            'Dumping & Loading HRA',
+            'Aktifitas Peledakan',
+            'Pengangkatan/Lifting',
+            'Bekerja di Ruang Terbatas',
+            'Bekerja di Dekat/Bawah Tebing Rawan Longsor FK<1.3',
+            'Aktifitas Land Clearing',
+            'Aktifitas Pengelasan Bahan Mudah Terbakar'
         ];
 
+        // Jobs that require geotechnical study
         const geotekRequiredJobs = [
             'Dumping & Loading HRA',
             'Bekerja di Dekat/Bawah Tebing Rawan Longsor FK<1.3',
-            'Pelepasan dan Pemasangan Tyre OHT di Jalan Tambang',
             'Aktifitas Land Clearing',
+            'Pelepasan dan Pemasangan Tyre OHT di Jalan Tambang',
             'Aktifitas Pengelasan Bahan Mudah Terbakar'
         ];
 
@@ -524,39 +526,37 @@
 
         // Toggle field requirements based on selected job type
         function toggleFieldRequirements() {
-            const selectedJob = jenisPekerjaanSelect.value;
+        const selectedJob = jenisPekerjaanSelect.value;
+        const stagglingPlanContainer = document.getElementById('staggling_plan_container');
+        const kajianGeotekContainer = document.getElementById('kajian_geotek_container');
 
-            // Staggling plan
-            if (noStagglingPlanJobs.includes(selectedJob)) {
-                stagglingPlanContainer.style.display = 'none';
-                document.getElementById('staggling_plan').required = false;
-            } else {
-                stagglingPlanContainer.style.display = 'block';
-                document.getElementById('staggling_plan').required = true;
-            }
-
-            // Kajian geotek
-            if (geotekRequiredJobs.includes(selectedJob)) {
-                kajianGeotekContainer.style.display = 'block';
-                document.getElementById('kajian_geotek').required = true;
-            } else {
-                kajianGeotekContainer.style.display = 'none';
-                document.getElementById('kajian_geotek').required = false;
-            }
-
-            // Lifting forms
-            if (selectedJob === liftingJob) {
-                p2hContainer.style.display = 'block';
-                inspeksiContainer.style.display = 'block';
-                document.getElementById('form_p2h_unit_lifting').required = true;
-                document.getElementById('form_inspeksi_tools').required = true;
-            } else {
-                p2hContainer.style.display = 'none';
-                inspeksiContainer.style.display = 'none';
-                document.getElementById('form_p2h_unit_lifting').required = false;
-                document.getElementById('form_inspeksi_tools').required = false;
-            }
+        // Staggling plan - only required for specific jobs
+        if (stagglingPlanRequiredJobs.includes(selectedJob)) {
+            stagglingPlanInput.required = true;
+            stagglingPlanContainer.style.display = 'block';
+        } else {
+            stagglingPlanInput.required = false;
+            stagglingPlanContainer.style.display = 'none';
         }
+
+        // Geotechnical study
+        if (geotekRequiredJobs.includes(selectedJob)) {
+            kajianGeotekInput.required = true;
+            kajianGeotekContainer.style.display = 'block';
+        } else {
+            kajianGeotekInput.required = false;
+            kajianGeotekContainer.style.display = 'none';
+        }
+
+        // Lifting forms
+        if (selectedJob === liftingJob) {
+            formP2HInput.required = true;
+            formInspeksiInput.required = true;
+        } else {
+            formP2HInput.required = false;
+            formInspeksiInput.required = false;
+        }
+    }
 
         // Initialize form
         toggleFieldRequirements();

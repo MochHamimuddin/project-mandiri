@@ -28,6 +28,14 @@ Route::middleware(['auth', 'inactivity'])->group(function () {
         return view('layout.home');
     })->name('dashboard');
 
+    Route::get('/beranda', function () {
+    return view('layout.beranda');
+    })->name('beranda');
+
+    Route::get('/prosedur', function () {
+    return view('data_sib.prosedur');
+    })->name('prosedur-sib');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Mitra Routes

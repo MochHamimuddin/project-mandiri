@@ -29,46 +29,52 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'username' => 'required|string',
-            'password' => 'required'
-        ]);
+{
+    $credentials = $request->validate([
+        'username' => 'required|string',
+        'password' => 'required'
+    ]);
 
-        if ($request->wantsJson() || $request->ajax()) {
-            if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
-                session(['last_activity' => now()]);
-
-                return response()->json([
-                    'success' => true,
-                    'redirect' => url('/daftar-laporan'),
-                    'message' => 'Login berhasil!'
-                ]);
-            }
-
-            return response()->json([
-                'success' => false,
-                'errors' => ['username' => 'Username atau password salah.']
-            ], 422);
-        }
-
+    if ($request->wantsJson() || $request->ajax()) {
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             session(['last_activity' => now()]);
-            $request->session()->flash('alert_type', 'success');
-            $request->session()->flash('alert_message', 'Login berhasil!');
-            $request->session()->flash('alert_title', 'Sukses');
-            $request->session()->flash('alert_timer', 2000);
-            $request->session()->flash('alert_showConfirmButton', false);
 
-            return redirect()->intended('/daftar-laporan');
+            // Redirect berdasarkan role untuk response JSON
+            $redirectUrl = auth()->user()->code_role === '001' ? '/daftar-laporan' : '/beranda';
+
+            return response()->json([
+                'success' => true,
+                'redirect' => url($redirectUrl),
+                'message' => 'Login berhasil!'
+            ]);
         }
 
-        return back()->withErrors([
-            'username' => 'Username atau password salah.',
-        ]);
+        return response()->json([
+            'success' => false,
+            'errors' => ['username' => 'Username atau password salah.']
+        ], 422);
     }
+
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+        session(['last_activity' => now()]);
+        $request->session()->flash('alert_type', 'success');
+        $request->session()->flash('alert_message', 'Login berhasil!');
+        $request->session()->flash('alert_title', 'Sukses');
+        $request->session()->flash('alert_timer', 2000);
+        $request->session()->flash('alert_showConfirmButton', false);
+
+        // Redirect berdasarkan role
+        $redirectUrl = auth()->user()->code_role === '001' ? '/daftar-laporan' : '/beranda';
+
+        return redirect()->intended($redirectUrl);
+    }
+
+    return back()->withErrors([
+        'username' => 'Username atau password salah.',
+    ]);
+}
 
     public function showRegisterForm()
     {
