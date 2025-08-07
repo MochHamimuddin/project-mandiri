@@ -13,6 +13,8 @@ use App\Http\Controllers\DevelopmentManpowerController;
 use App\Http\Controllers\KeselamatanAreaKerjaController;
 use App\Http\Controllers\ProgramKerjaKesehatanController;
 use App\Http\Controllers\ProgramLingkunganHidupController;
+use App\Http\Controllers\ListDokumenController;
+
 
 Route::middleware(['inactivity', 'guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -222,6 +224,19 @@ Route::prefix('data-sib')->name('data-sib.')->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 Route::get('/reports/export', [ReportController::class, 'exportBisnis'])->name('reports.bisnis.export');
 });
+
+
+// Upload List Dokumen
+Route::prefix('list-dokumen')->name('list-dokumen.')->group(function () {
+    Route::get('/', [ListDokumenController::class, 'index'])->name('index');
+    Route::get('/create', [ListDokumenController::class, 'create'])->name('create');
+    Route::post('/', [ListDokumenController::class, 'store'])->name('store');
+    Route::get('/{listDokumen}', [ListDokumenController::class, 'show'])->name('show');
+        Route::get('/{listDokumen}/edit', [ListDokumenController::class, 'edit'])->name('edit');
+        Route::put('/{listDokumen}', [ListDokumenController::class, 'update'])->name('update');
+        Route::delete('/{listDokumen}', [ListDokumenController::class, 'destroy'])->name('destroy');
+});
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
